@@ -1,15 +1,7 @@
-/*
- * Created on Nov 5, 2005
- *
- */
 package org.fl.decompteTemps.core;
 
 import java.io.File;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class StorageGroup {
 
     private GroupEntity group ;

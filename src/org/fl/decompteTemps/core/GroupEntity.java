@@ -1,7 +1,3 @@
-/*
- * Created on Nov 5, 2005
- *
- */
 package org.fl.decompteTemps.core;
 
 import java.io.IOException;
@@ -11,40 +7,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class GroupEntity {
     
-    private static String dateFrancePattern = "EEEE dd MMMM yyyy � HH:mm:ss.SSS" ;
-    private static SimpleDateFormat dateFranceFormat = new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);
+    private final static String dateFrancePattern = "EEEE dd MMMM yyyy à HH:mm:ss.SSS" ;
+    private final static SimpleDateFormat dateFranceFormat = new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);
     
     private List<Entity> entities ;
     
-    /**
-     * 
-     */
     public GroupEntity() {
         super();
         entities = new ArrayList<Entity>() ;
        
     }
 
-    /**
-     * Add an entity
-     * @param e entity
-     */
     public void addEntity(Entity e) {
         entities.add(e) ;
     }
     
-    /**
-     * Get the total presence duration
-     * @param a
-     * @param b
-     * @return the total presence duration
-     */
     public long getPresenceDurationTotal(Date a, Date b) {
         if (a.after(b)) {
             Control.presenceLog.warning("Begin is after end") ;
@@ -59,12 +38,6 @@ public class GroupEntity {
         return duration ;
     }
     
-    /**
-     * Get presence duration per entity
-     * @param a begin date
-     * @param b end date
-     * @return the presence duration per entity
-     */
     public long getPresenceDurationPerEntity(Date a, Date b) {
         if (a.after(b))  {
             Control.presenceLog.warning("Begin is after end") ;
@@ -78,12 +51,6 @@ public class GroupEntity {
         return (duration / entities.size()) ;
     }
     
-    /**
-     * Get the presence percentage
-     * @param a begin date
-     * @param b end date
-     * @return the presence percentage
-     */
     public float getPresencePercentage(Date a, Date b) {
         if (a.after(b)) {
             Control.presenceLog.warning("Begin is after end") ;
@@ -94,20 +61,13 @@ public class GroupEntity {
         return ((presenceDuration * 100) / duration)  ;
     }
     
-    /**
-     * Get the entities of the group
-     * @return the entities of the group
-     */
     public Entity[] getEntities() {
         
         Entity[] entityTab = new Entity[entities.size()];
         return (Entity[])entities.toArray(entityTab);
     }
     
-    /**
-     * Get the begin presence
-     * @return the begin presence
-     */
+
     public Date getBeginPresence() {
         
         Date b = new Date() ;
@@ -119,11 +79,6 @@ public class GroupEntity {
         return b;
     }
     
-    /**
-     * Get the presence end
-     * @return the presence end
-     * @throws IOException
-     */
     public Date getEndPresence() throws IOException {
         
         Date e = new Date() ;
@@ -135,18 +90,10 @@ public class GroupEntity {
         return e;
     }
     
-    /**
-     * <code>IN</code> place
-     */
+
     public static int IN = Entity.IN ;
-    /**
-     * <code>OUT</code> place
-     */
     public static int OUT = Entity.OUT ;
 
-    /**
-     * <code>MIXED</code>
-     */
     // the calculus is a way to generate a number different from IN and OUT
     public static int MIXED = 2*(Entity.IN+Entity.OUT) ;
     

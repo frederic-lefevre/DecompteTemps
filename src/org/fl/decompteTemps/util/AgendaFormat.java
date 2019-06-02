@@ -1,7 +1,3 @@
-/*
- * Created on Nov 12, 2005
- *
- */
 package org.fl.decompteTemps.util;
 
 import java.io.PrintWriter;
@@ -13,20 +9,16 @@ import java.util.Locale;
 
 import org.fl.decompteTemps.core.Events;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class AgendaFormat {
 
-	private static String dayPattern = "dd/MM/yyyy" ;
-	private static SimpleDateFormat dayFormat = new SimpleDateFormat(dayPattern, Locale.US);
-	private static String datePattern =  dayPattern + " HH:mm";
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.US);
-	private static String dateFrancePattern = "EEEE dd MMMM yyyy � HH:mm" ;
-	private static SimpleDateFormat dateFranceFormat = new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);
-	private static String dateFullFrancePattern = "EEEE dd MMMM yyyy � HH:mm:ss:SSS" ;
-	private static SimpleDateFormat dateFullFranceFormat = new SimpleDateFormat(dateFullFrancePattern, Locale.FRANCE);
+	private final static String 		  dayPattern 			= "dd/MM/yyyy" ;
+	private final static SimpleDateFormat dayFormat  			= new SimpleDateFormat(dayPattern, Locale.US);
+	private final static String 		  datePattern 			=  dayPattern + " HH:mm";
+	private final static SimpleDateFormat dateFormat 			= new SimpleDateFormat(datePattern, Locale.US);
+	private final static String 		  dateFrancePattern 	= "EEEE dd MMMM yyyy à HH:mm" ;
+	private final static SimpleDateFormat dateFranceFormat 		= new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);
+	private final static String 		  dateFullFrancePattern = "EEEE dd MMMM yyyy � HH:mm:ss:SSS" ;
+	private final static SimpleDateFormat dateFullFranceFormat  = new SimpleDateFormat(dateFullFrancePattern, Locale.FRANCE);
 
     static {
         dateFormat.setLenient(false) ;

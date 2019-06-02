@@ -1,7 +1,3 @@
-/*
- * Created on Nov 5, 2005
- *
- */
 package org.fl.decompteTemps.core;
 
 import java.io.BufferedReader;
@@ -17,19 +13,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class StorageEntity {
 
-    private File fileEntity ;
-    private String name ;
-    private static String datePattern = "dd/MM/yyyy HH:mm" ;
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
-    private static String commentSeparator = "-" ;
-    private static String inMark = "In" ;
-    private static String outMark = "Out" ;
+    private final File fileEntity ;
+    private final String name ;
+    private final static String datePattern = "dd/MM/yyyy HH:mm" ;
+    private final static SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
+    private final static String commentSeparator = "-" ;
+    private final static String inMark = "In" ;
+    private final static String outMark = "Out" ;
     
     static {
         dateFormat.setLenient(false) ;

@@ -4,10 +4,6 @@
  */
 package org.fl.decompteTemps.util;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class StringFormat {
 
     /**

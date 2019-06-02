@@ -1,7 +1,3 @@
-/*
- * Created on Nov 13, 2005
- *
- */
 package org.fl.decompteTemps.core;
 
 import java.util.ArrayList;
@@ -11,39 +7,21 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class EventAgenda {
 
     private List<Events> listEvents ;
-    /**
-     * 
-     */
+
     public EventAgenda() {
         super();
         listEvents = new ArrayList<Events>() ;
     }
 
-    /**
-     * Add an event
-     * @param dateEvents event date
-     * @param nameEvents event names
-     * @param typeEvents event type
-     * @param comment
-     */
     public void addEvents(Date dateEvents, String[] nameEvents, int typeEvents, String comment) {
         listEvents.add(new Events(dateEvents, nameEvents, typeEvents, comment)) ;
         EventsComparator evComp = new EventsComparator() ;
         Collections.sort(listEvents, evComp) ;
     }
     
-    /**
-     * Merge 2 event agendas
-     * @param agd the event agenda to merge
-     */
     public void mergeEventAgenda(EventAgenda agd) {
         listEvents.addAll(agd.listEvents) ;
         EventsComparator evComp = new EventsComparator() ;
@@ -66,10 +44,6 @@ public class EventAgenda {
         listEvents = newList ;
     }
     
-    /**
-     * Get the events
-     * @return the events of the event agenda
-     */
     public Events[] getEvents() {
         Events[] evt = new Events[listEvents.size()] ;
         

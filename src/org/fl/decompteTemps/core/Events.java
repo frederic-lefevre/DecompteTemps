@@ -1,14 +1,7 @@
-/*
- * Created on Nov 13, 2005
- */
 package org.fl.decompteTemps.core;
 
 import java.util.Date;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class Events {
 
     private Date dateEvents ;
@@ -16,22 +9,9 @@ public class Events {
     private int typeEvents ;
     private String comment;
     
-    /**
-     * <code>IN</code>: event "in"
-     */
-    public static int IN = 1 ;
-    /**
-     * <code>OUT</code>: Event "out"
-     */
-    public static int OUT = 2 ;
+    public final static int IN = 1 ;
+    public final static int OUT = 2 ;
 
-    /**
-     * Create an event
-     * @param dateEvents : date of event
-     * @param nameEvents : names
-     * @param typeEvents : type of event
-     * @param c : comment
-     */
     public Events(Date dateEvents, String[] nameEvents, int typeEvents, String c) {
         super();
         this.dateEvents = dateEvents;
@@ -69,27 +49,19 @@ public class Events {
             return false ;
         }
     }
-    /**
-     * @return Returns the dateEvents.
-     */
+
     public Date getDateEvents() {
         return dateEvents;
     }
-    /**
-     * @return Returns the nameEvents.
-     */
+
     public String[] getNameEvents() {
         return nameEvents;
     }
-    /**
-     * @return Returns the typeEvents.
-     */
+
     public int getTypeEvents() {
         return typeEvents;
     }
-    /**
-     * @return Returns the comment.
-     */
+
     public String getComment() {
         return comment;
     }

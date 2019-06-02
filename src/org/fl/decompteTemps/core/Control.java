@@ -28,10 +28,6 @@ public final class Control {
     private static Date endDate ;
     private static boolean endDateIsNow ;
     
-
-	/**
-     * Init application
-     */
     public static void init() {
 
         if (! initialized) {
@@ -42,7 +38,7 @@ public final class Control {
     public static void forceInit() {
     	
     	//access to properties and logger
-		RunningContext tempsRunningContext = new RunningContext("CollectionMusique", null, DEFAULT_PROP_FILE);
+		RunningContext tempsRunningContext = new RunningContext("DecompteTemps", null, DEFAULT_PROP_FILE);
 	
 		AdvancedProperties props = tempsRunningContext.getProps() ;
 
@@ -64,7 +60,7 @@ public final class Control {
 	        	endDateIsNow = false ;
 				endDate = AgendaFormat.getDate(ed, "00", "00") ;
 			} catch (ParseException e) {
-				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propri�t� presence.endDate: ", e) ;
+				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propriété presence.endDate: ", e) ;
 				endDate = new Date() ;
 				endDateIsNow = true ;
 			}

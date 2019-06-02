@@ -1,15 +1,7 @@
-/*
- * Created on Nov 4, 2005
- *
- */
 package org.fl.decompteTemps.core;
 
 import java.util.Date;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class Period {
     
     private Date begin;

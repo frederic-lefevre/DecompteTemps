@@ -14,7 +14,7 @@ import org.fl.decompteTemps.util.AgendaFormat;
 
 public class StatGlobaleTable {
 
-	private JTable statGlobale ;
+	private JTable 		statGlobale ;
 	private JScrollPane scrollStat ;
 	
 	public JScrollPane getStatGlobale() {
@@ -35,13 +35,14 @@ public class StatGlobaleTable {
 	
 	public void update() {
 		
-		Date endDate = Control.getEndDate() ;
-		GroupEntity gr = Control.getCurrentGroup() ;
-		Entity[] enfants = gr.getEntities();
+		Date endDate 	   = Control.getEndDate() ;
+		GroupEntity gr 	   = Control.getCurrentGroup() ;
+		Entity[] enfants   = gr.getEntities();
 		Date beginPresence = gr.getBeginPresence() ;
 		long presPerEntity = gr.getPresenceDurationPerEntity(beginPresence, endDate) ;
-		long totalTime = endDate.getTime() - beginPresence.getTime() ;
-		Object[][] result = new Object[enfants.length+2][4] ;
+		long totalTime 	    = endDate.getTime() - beginPresence.getTime() ;
+		Object[][] result   = new Object[enfants.length+2][4] ;
+		
 		for (int i = 0; i < enfants.length; i++) { 
 		
 			result[i][0] = enfants[i].getName() ;

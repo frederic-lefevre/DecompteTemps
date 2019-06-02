@@ -1,17 +1,9 @@
-/*
- * Created on Nov 4, 2005
- *
- */
 package org.fl.decompteTemps.core;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class PresenceAgenda {
 
     private List<Period> periods ;

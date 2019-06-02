@@ -1,16 +1,8 @@
-/*
- * Created on Nov 4, 2005
- *
- */
 package org.fl.decompteTemps.core;
 
 import java.io.IOException;
 import java.util.Date;
 
-/**
- * @author Fr�d�ric Lef�vre
- *
- */
 public class Entity {
 
     private String name;
@@ -18,9 +10,6 @@ public class Entity {
     private PresenceAgenda presence ;
     private StorageEntity storage;
     
-    /**
-     * @param st The storage of the entity
-     */
     public Entity(StorageEntity st) {
         super();
        
@@ -140,14 +129,8 @@ public class Entity {
         }
     }
     
-    /**
-     * <code>IN</code> : Place
-     */
-    public static int IN = 1 ;
-    /**
-     * <code>OUT</code> : Place
-     */
-    public static int OUT = 2 ;
+    public final static int IN = 1 ;
+    public final static int OUT = 2 ;
     
     /**
      * Get the presence place (IN or OUT)

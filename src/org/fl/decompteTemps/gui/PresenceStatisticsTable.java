@@ -16,7 +16,7 @@ import org.fl.decompteTemps.util.AgendaFormat;
 
 public class PresenceStatisticsTable {
 
-	private JTable tableMois ;
+	private JTable 	   	tableMois ;
 	private JScrollPane scrollPane ;
 	
 	public JScrollPane getPresenceStatTable() {

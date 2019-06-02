@@ -12,15 +12,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public class DecompteTempsGui extends JFrame {
-
 	
 	private static final long serialVersionUID = -3275605158047047933L;
-	private static StatTitle st ;
-	private static GestionGroupe gestGrp ;
-	private static StatGlobaleTable tStat ;
-	private static MouvementTable tMove ;
-	private static PresenceStatisticsTable tMois ;
-	private static EntreeMouvement inMove ;
+	
+	private static StatTitle 				st ;
+	private static GestionGroupe 			gestGrp ;
+	private static StatGlobaleTable 		tStat ;
+	private static MouvementTable 			tMove ;
+	private static PresenceStatisticsTable 	tMois ;
+	private static EntreeMouvement 			inMove ;
 	
 	/**
 	 * Launch the application.
@@ -101,6 +101,5 @@ public class DecompteTempsGui extends JFrame {
 		
 		getContentPane().add(tableMois) ;
 		
-	}
-	
+	}	
 }

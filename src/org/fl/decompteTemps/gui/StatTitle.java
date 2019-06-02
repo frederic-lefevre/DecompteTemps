@@ -16,7 +16,7 @@ import org.fl.decompteTemps.core.GroupEntity;
 public class StatTitle {
 
 	private StringBuilder sTitle ;
-	private JLabel jTitle ;
+	private JLabel 		  jTitle ;
 	
 	public StatTitle(Date d) {
 		

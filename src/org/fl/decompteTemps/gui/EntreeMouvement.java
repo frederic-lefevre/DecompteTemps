@@ -34,7 +34,7 @@ public class EntreeMouvement {
 	private GroupEntity completeGroup ;
 	private Entity[] enfants ;
 	
-	private static String ENTREE = " Entr�e" ;
+	private static String ENTREE = " Entrée" ;
 	private static String SORTIE = " Sortie" ;
 	
 	public JPanel getEntreeMouvement() {
@@ -46,7 +46,7 @@ public class EntreeMouvement {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			String dateFrancePattern = "EEEE dd MMMM yyyy � HH:mm" ;
+			String dateFrancePattern = "EEEE dd MMMM yyyy à HH:mm" ;
 			SimpleDateFormat dateFranceFormat = new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);
 			String startDate = StringFormat.nullToEmpty(jour.getText()).trim() ;
 			String startHour = StringFormat.nullToEmpty(heure.getText()).trim() ;
@@ -61,7 +61,7 @@ public class EntreeMouvement {
 				if (whoIdx < enfants.length) {
 					if (enfants[whoIdx].getPresencePlace() == Entity.OUT) {
 						enfants[whoIdx].addBeginDate(d, comment);
-						msg.setText(enfants[whoIdx].getName() + " entr� le " + mvtDate) ;
+						msg.setText(enfants[whoIdx].getName() + " entré le " + mvtDate) ;
 					} else {
 						enfants[whoIdx].addEndDate(d, comment);
 						msg.setText(enfants[whoIdx].getName() + " sorti le " + mvtDate) ;
@@ -69,13 +69,13 @@ public class EntreeMouvement {
 				} else {
 					int presencePlace = gr.getPresencePlace();
 	                if (presencePlace == GroupEntity.MIXED) {
-	                	Control.presenceLog.severe("Mouvement de groupe alors que le groupe n'est pas au m�me endroit") ;
+	                	Control.presenceLog.severe("Mouvement de groupe alors que le groupe n'est pas au même endroit") ;
 	                } else if (presencePlace == GroupEntity.IN) {
 	                	gr.addEndDate(d, comment);
-	                	msg.setText("Tous sorti le " + mvtDate) ;
+	                	msg.setText("Tous sortis le " + mvtDate) ;
 	                } else {
 	                	gr.addBeginDate(d, comment);
-	                	msg.setText("Tous entr� le " + mvtDate) ;
+	                	msg.setText("Tous entrés le " + mvtDate) ;
 	                }
 				}
 			} catch (ParseException e) {
@@ -100,7 +100,7 @@ public class EntreeMouvement {
 		JPanel entreeDate = new JPanel() ;
 		entreeDate.setLayout(new GridLayout(2, 3, 5, 5)) ;
 		
-		entreeDate.add(new JLabel("Jour/Mois/Ann�e")) ;
+		entreeDate.add(new JLabel("Jour/Mois/Année")) ;
 		entreeDate.add(new JLabel("Heures")) ;
 		entreeDate.add(new JLabel("Minutes")) ;
 		
@@ -119,7 +119,7 @@ public class EntreeMouvement {
 		// fill combobox
 		update() ;
 		
-		validateMove = new JButton("Entr�e mouvement") ;
+		validateMove = new JButton("Entrée mouvement") ;
 		
 		movePane.add(moveWho) ;
 		movePane.add(validateMove) ;

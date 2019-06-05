@@ -4,6 +4,27 @@
   <artifactId>DecompteTemps</artifactId>
   <version>1.0.0</version>
   <name>Decompte temps</name>
+  
+  	<dependencies>
+		<dependency>
+			<groupId>org.fl.FlUtils</groupId>
+			<artifactId>FlUtils</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.3.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.3.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>

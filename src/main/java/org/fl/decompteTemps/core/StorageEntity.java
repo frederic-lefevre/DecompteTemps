@@ -15,8 +15,9 @@ import java.util.logging.Level;
 
 public class StorageEntity {
 
-    private final File fileEntity ;
+    private final File   fileEntity ;
     private final String name ;
+    
     private final static String datePattern = "dd/MM/yyyy HH:mm" ;
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
     private final static String commentSeparator = "-" ;
@@ -27,31 +28,18 @@ public class StorageEntity {
         dateFormat.setLenient(false) ;
     }
     
-    /**
-     * Create a storage entity with a existant file
-     * @param f File
-     */
     public StorageEntity(File f) {
         super();
         fileEntity = f ;
         name = getName() ;
     }
 
-    /**
-     * Create a storage entity with a non existant file
-     * @param f File
-     * @param n Name
-     */
     public StorageEntity(File f, String n) {
         super();
         fileEntity = f ;
         name = n ;
     }
 
-    /**
-     * Get the presence agenda
-     * @return The presence agenda
-     */
     public PresenceAgenda getPresenceAgenda() {
         
         String inputLine = "" ;
@@ -139,10 +127,6 @@ public class StorageEntity {
         }
     }
     
-    /**
-     * Get entity name
-     * @return The name of the entity
-     */
     public String getName() {
         
         String inputLine = "" ;
@@ -161,10 +145,6 @@ public class StorageEntity {
         return inputLine ;
     }
 
-    /**
-     * Store the entity
-     * @param agd the presence agenda
-     */
     public void storeEntity(PresenceAgenda agd) {
         
         // (Re)Create the file
@@ -198,10 +178,6 @@ public class StorageEntity {
         }
     }
     
-    /**
-     * Add a presence
-     * @param p The period
-     */
     public void addPresence(Period p) {
 
         PrintWriter out;
@@ -232,11 +208,6 @@ public class StorageEntity {
 
     }
     
-    /**
-     * Add a end date
-     * @param d Date
-     * @param comment
-     */
     public void addEndDate(Date d, String comment) {
         
         PrintWriter out;
@@ -263,11 +234,6 @@ public class StorageEntity {
         }         
     }
     
-    /**
-     * Add a begin date
-     * @param d Date
-     * @param comment
-     */
     public void addBeginDate(Date d, String comment) {
         
         PrintWriter out;
@@ -301,11 +267,6 @@ public class StorageEntity {
         }         
     }
     
-    /**
-     * Get the last period
-     * @return the last period
-     * @throws IOException
-     */
     public Period getLastPeriod() throws IOException {
         // WARNING : works if there is at least 2 lines (one complete period)
         
@@ -349,12 +310,6 @@ public class StorageEntity {
         return p;
     }
     
-    /**
-     * @param out printwoiter to write to
-     * @param d date
-     * @param c comment
-     * @param mark in or out mark
-     */
     private void addDate(PrintWriter out, Date d, String c, String mark) {
         
         out.print(mark) ;

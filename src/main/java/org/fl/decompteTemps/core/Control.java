@@ -25,7 +25,7 @@ public final class Control {
     private static GroupEntity completeGroup ;
     private static GroupEntity currentGroup ;
     
-    private static Date endDate ;
+    private static Date    endDate ;
     private static boolean endDateIsNow ;
     
     public static void init() {

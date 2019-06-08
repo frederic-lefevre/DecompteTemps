@@ -136,10 +136,10 @@ public class AgendaFormat {
 	private static Date getBeginMonth(GregorianCalendar cal) {
 		
         cal.set(GregorianCalendar.DAY_OF_MONTH, cal.getActualMinimum(GregorianCalendar.DAY_OF_MONTH)) ;
-        cal.set(GregorianCalendar.HOUR_OF_DAY, 0) ;
-        cal.set(GregorianCalendar.MINUTE, 0) ;
-        cal.set(GregorianCalendar.SECOND, 0) ;
-        cal.set(GregorianCalendar.MILLISECOND, 0) ;
+        cal.set(GregorianCalendar.HOUR_OF_DAY, 	0) ;
+        cal.set(GregorianCalendar.MINUTE, 		0) ;
+        cal.set(GregorianCalendar.SECOND, 		0) ;
+        cal.set(GregorianCalendar.MILLISECOND, 	0) ;
         return cal.getTime() ;
 	}
 	

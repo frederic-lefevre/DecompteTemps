@@ -9,15 +9,14 @@ import java.util.Locale;
 
 public class GroupEntity {
     
-    private final static String dateFrancePattern = "EEEE dd MMMM yyyy à HH:mm:ss.SSS" ;
+    private final static String dateFrancePattern 		   = "EEEE dd MMMM yyyy à HH:mm:ss.SSS" ;
     private final static SimpleDateFormat dateFranceFormat = new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);
     
     private List<Entity> entities ;
     
     public GroupEntity() {
         super();
-        entities = new ArrayList<Entity>() ;
-       
+        entities = new ArrayList<Entity>() ;      
     }
 
     public void addEntity(Entity e) {
@@ -91,17 +90,12 @@ public class GroupEntity {
     }
     
 
-    public static int IN = Entity.IN ;
+    public static int IN  = Entity.IN ;
     public static int OUT = Entity.OUT ;
 
     // the calculus is a way to generate a number different from IN and OUT
     public static int MIXED = 2*(Entity.IN+Entity.OUT) ;
     
-    /**
-     * Get the presence place
-     * @return the presence place
-     * @throws IOException
-     */
     public int getPresencePlace() throws IOException {
         
         if (entities.size() == 0) {
@@ -118,11 +112,6 @@ public class GroupEntity {
         }
     }
 
-    /**
-     * Add a begin date 
-     * @param d date
-     * @param c comment
-     */
     public void addBeginDate(Date d, String c) {
         for (int i=0; i < entities.size(); i++) {
             ((Entity)(entities.get(i))).addBeginDate(d, c) ;
@@ -131,11 +120,7 @@ public class GroupEntity {
         }
     }
     
-    /**
-     * Add a end date 
-     * @param d date
-     * @param c comment
-     */
+
     public void addEndDate(Date d, String c) {
         for (int i=0; i < entities.size(); i++) {
             ((Entity)(entities.get(i))).addEndDate(d, c) ;

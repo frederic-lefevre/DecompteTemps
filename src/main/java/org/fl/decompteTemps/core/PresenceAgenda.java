@@ -7,39 +7,23 @@ import java.util.List;
 public class PresenceAgenda {
 
     private List<Period> periods ;
-    private long duration ;
-    /**
-     * 
-     */
+    private long 		 duration ;
+
     public PresenceAgenda() {
         super();
         duration = 0 ;
         periods = new ArrayList<Period>() ;
     }
 
-    /**
-     * Add a presence
-     * @param p presence
-     */
     public void addPresence(Period p) {
         periods.add(p) ;
         duration = duration + p.getDuration() ;
     }
     
-    /**
-     * Get the duration of the presence
-     * @return the duration of the presence
-     */
     public long getDuration () {
         return duration ;
     }
     
-    /**
-     * Get the presence duration between 2 dates
-     * @param a begin date
-     * @param b end date
-     * @return duration in milliseconds
-     */
     public long getDuration(Date a, Date b) {
         
         if (a.after(b)) {
@@ -59,8 +43,7 @@ public class PresenceAgenda {
      */
     public Period[] getPeriods() {
         
-        Period[] result = new Period[periods.size()] ;
-        
+        Period[] result = new Period[periods.size()] ;       
         return (Period[])periods.toArray(result) ;
     }
 }

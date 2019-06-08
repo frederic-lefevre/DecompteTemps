@@ -7,11 +7,6 @@ public class StorageGroup {
     private GroupEntity group ;
     private static final String ENTITY_EXTENTION = ".entity"; ;
     
-    /**
-     * Create a storage group
-     * @param dir directory
-     * 
-     */
     public StorageGroup(File dir) {
         super();
         
@@ -36,10 +31,6 @@ public class StorageGroup {
         
     }
 
-    /**
-     * Get the group entity corresponding to this storage 
-     * @return the group entity corresponding to this storage
-     */
     public GroupEntity getGroupEntity() {
         return group ;
     }

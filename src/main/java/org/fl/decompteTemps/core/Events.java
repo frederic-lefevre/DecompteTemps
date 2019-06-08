@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class Events {
 
-    private Date dateEvents ;
+    private Date 	 dateEvents ;
     private String[] nameEvents ;
-    private int typeEvents ;
-    private String comment;
+    private int 	 typeEvents ;
+    private String   comment;
     
-    public final static int IN = 1 ;
+    public final static int IN  = 1 ;
     public final static int OUT = 2 ;
 
     public Events(Date dateEvents, String[] nameEvents, int typeEvents, String c) {

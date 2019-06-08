@@ -57,8 +57,8 @@ public class AgendaFormat {
 	 */
 	public static String durationToString(long duration) {
 	    
-	    long nbHeure = duration / (1000 * 3600) ;
-	    long nbDay = nbHeure / 24 ;
+	    long nbHeure 	 = duration / (1000 * 3600) ;
+	    long nbDay 		 = nbHeure / 24 ;
 	    long remainHeure = nbHeure % 24 ;
 	    
 	    return (Long.toString(nbDay) + " jours " + Long.toString(remainHeure) + " heures ") ;
@@ -148,17 +148,16 @@ public class AgendaFormat {
 	    GregorianCalendar cal = new GregorianCalendar() ;
 	    cal.setTime(d) ;
 	    return getEndMonth(cal) ;
-
 	}
 	
 	// get end "month" date: last day of a month's date
 	private static Date getEndMonth(GregorianCalendar cal) {
 		
         cal.set(GregorianCalendar.DAY_OF_MONTH, cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH)) ;
-        cal.set(GregorianCalendar.HOUR_OF_DAY, 23) ;
-        cal.set(GregorianCalendar.MINUTE, 59) ;
-        cal.set(GregorianCalendar.SECOND, 59) ;
-        cal.set(GregorianCalendar.MILLISECOND, 999) ;
+        cal.set(GregorianCalendar.HOUR_OF_DAY, 	23) ;
+        cal.set(GregorianCalendar.MINUTE, 		59) ;
+        cal.set(GregorianCalendar.SECOND, 	   	59) ;
+        cal.set(GregorianCalendar.MILLISECOND, 	999) ;
         return cal.getTime() ;
 	}
 

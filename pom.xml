@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl.DecompteTemps</groupId>
 	<artifactId>DecompteTemps</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>Decompte temps</name>
 
 	<dependencies>

@@ -1,32 +1,35 @@
 package org.fl.decompteTemps.core;
 
-import java.io.File;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.logging.Level;
 
 public class StorageGroup {
 
-    private GroupEntity group ;
+    private final GroupEntity group ;
     private static final String ENTITY_EXTENTION = ".entity"; ;
     
-    public StorageGroup(File dir) {
+    public StorageGroup(Path dir) {
         super();
         
-        if ((dir == null) || (! dir.isDirectory())) {
+        if ((dir == null) || (! Files.isDirectory(dir))) {
             Control.presenceLog.severe("Argument is not a directory") ;
             throw new IllegalArgumentException("Argument is not a directory") ;
         }
         group = new GroupEntity() ;
         
         // scan directory
-        File[] entityFiles = dir.listFiles() ;
-        File currFile ;
-        for (int i=0; i < entityFiles.length; i++) {
-            
-            currFile = entityFiles[i] ;
-            // check that file is an entity
-            if ((currFile.isFile()) && (currFile.getName().endsWith(ENTITY_EXTENTION))) {
-                Control.presenceLog.fine("Found an entity " + currFile.getAbsolutePath()) ;
-                group.addEntity(new Entity(new StorageEntity(currFile))) ;
-            }
+        try (DirectoryStream<Path> dirFileStream = Files.newDirectoryStream(dir)) {
+
+        	for (Path currFile : dirFileStream) {
+        		if ((Files.isRegularFile(currFile)) && (currFile.toString().endsWith(ENTITY_EXTENTION))) {
+        			Control.presenceLog.fine("Found an entity " + currFile) ;
+        			group.addEntity(new Entity(new StorageEntity(currFile))) ;
+        		}
+        	}
+        } catch (Exception e) {
+        	Control.presenceLog.log(Level.SEVERE, "Exception when scanning directory " + dir, e);
         }
         
     }

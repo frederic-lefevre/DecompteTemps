@@ -1,6 +1,6 @@
 package org.fl.decompteTemps.core;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -18,7 +18,7 @@ public final class Control {
     
     private static final String DEFAULT_PROP_FILE = "presence.properties";
 
-    private static File presenceDirectoryName;
+    private static Path presenceDirectoryName;
 
     private static boolean initialized = false ; 
     
@@ -46,8 +46,7 @@ public final class Control {
         presenceLog = tempsRunningContext.getpLog() ;
 
         // Get the root directory
-        presenceDirectoryName = new File(props.getProperty("presence.rootDir.name",
-            "E:/FredericPersonnel/FamilleEnfants/div/PlanningGarde/presence"));
+        presenceDirectoryName = props.getPathFromURI("presence.rootDir.name") ;
     
         // Get the end date
         String ed = props.getProperty("presence.endDate") ;
@@ -77,7 +76,7 @@ public final class Control {
     /**
      * @return Returns the presenceDirectoryName.
      */
-    public static File getPresenceDirectoryName() {
+    public static Path getPresenceDirectoryName() {
         return presenceDirectoryName;
     }
     

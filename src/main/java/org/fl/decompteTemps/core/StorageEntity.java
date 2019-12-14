@@ -2,12 +2,10 @@ package org.fl.decompteTemps.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +13,7 @@ import java.util.logging.Level;
 
 public class StorageEntity {
 
-    private final File   fileEntity ;
+    private final Path   fileEntity ;
     private final String name ;
     
     private final static String datePattern = "dd/MM/yyyy HH:mm" ;
@@ -28,13 +26,13 @@ public class StorageEntity {
         dateFormat.setLenient(false) ;
     }
     
-    public StorageEntity(File f) {
+    public StorageEntity(Path f) {
         super();
         fileEntity = f ;
         name = getName() ;
     }
 
-    public StorageEntity(File f, String n) {
+    public StorageEntity(Path f, String n) {
         super();
         fileEntity = f ;
         name = n ;
@@ -46,60 +44,50 @@ public class StorageEntity {
         PresenceAgenda agd = new PresenceAgenda() ;
         // Line number
         int lineNumber = 1 ;
-        BufferedReader in ;
         
-        try {
-        	in = new BufferedReader( new FileReader(fileEntity));
+     	try (BufferedReader in = Files.newBufferedReader(fileEntity)) {
+       
+    		// read first line : name
+    		inputLine = in.readLine() ;
         
-        	try {
-           
-        		// read first line : name
-        		inputLine = in.readLine() ;
+    		// one line
+    		String[] inFields ;
+    		String[] outFields ;
+        
+    		while ((inputLine = in.readLine()) != null) {
+             
+    			lineNumber = lineNumber + 2 ;
+    			// read in line
+    			inFields = inputLine.split(commentSeparator) ;
+    			Control.presenceLog.finer("Find presence in date " + inputLine) ;
             
-        		// one line
-        		String[] inFields ;
-        		String[] outFields ;
+    			// read  out line
+    			if ((inputLine = in.readLine()) != null) {
+    				outFields = inputLine.split(commentSeparator) ;
+    				Control.presenceLog.finer("Find presence out date " + inputLine) ;
+    			} else {
+    				outFields = null ;
+    			}
             
-        		while ((inputLine = in.readLine()) != null) {
-                 
-        			lineNumber = lineNumber + 2 ;
-        			// read in line
-        			inFields = inputLine.split(commentSeparator) ;
-        			Control.presenceLog.finer("Find presence in date " + inputLine) ;
-                
-        			// read  out line
-        			if ((inputLine = in.readLine()) != null) {
-        				outFields = inputLine.split(commentSeparator) ;
-        				Control.presenceLog.finer("Find presence out date " + inputLine) ;
-        			} else {
-        				outFields = null ;
-        			}
-                
-        			if ((! isIn(inFields)) || (isIn(outFields))) {
-        				in.close();
-        				throw (new ParseException("Malformed period: " + fileEntity.getAbsolutePath(), lineNumber)) ;
-        			}
-        			agd.addPresence(new Period(getFieldDate(inFields), getFieldDate(outFields), getFieldComment(inFields), getFieldComment(outFields))) ;
-                
-        		}
-          
-        	} catch (ParseException e) {
-        		Control.presenceLog.log(Level.SEVERE, "Parse entity file error, line " + lineNumber, e) ;
-        		Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
-        	} catch (IOException e) {
-        		Control.presenceLog.log(Level.SEVERE, "IO exception reading entity File, line " + lineNumber, e) ;
-        		Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
-        	}
-        	
-        	  // close file
-            in.close();
-        } catch (FileNotFoundException e) {
-    		Control.presenceLog.log(Level.SEVERE, "Entity File not found ", e) ;
-    		Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
-        }catch (IOException e) {
-    		Control.presenceLog.log(Level.SEVERE, "IO exception closing entity File ", e) ;
-    		Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
+    			if ((! isIn(inFields)) || (isIn(outFields))) {
+    				in.close();
+    				throw (new ParseException("Malformed period: " + fileEntity, lineNumber)) ;
+    			}
+    			agd.addPresence(new Period(getFieldDate(inFields), getFieldDate(outFields), getFieldComment(inFields), getFieldComment(outFields))) ;
+            
+    		}
+      
+    	} catch (ParseException e) {
+    		Control.presenceLog.log(Level.SEVERE, "Parse entity file error, line " + lineNumber, e) ;
+    		Control.presenceLog.severe("File " + fileEntity) ;
+    	} catch (IOException e) {
+    		Control.presenceLog.log(Level.SEVERE, "IO exception reading entity File, line " + lineNumber, e) ;
+    		Control.presenceLog.severe("File " + fileEntity) ;
+    	}  catch (Exception e) {
+    		Control.presenceLog.log(Level.SEVERE, "Exception reading entity File, line " + lineNumber, e) ;
+    		Control.presenceLog.severe("File " + fileEntity) ;
     	}
+
        return agd ;
     }
 
@@ -130,16 +118,14 @@ public class StorageEntity {
     public String getName() {
         
         String inputLine = "" ;
-        try {
-            BufferedReader in = new BufferedReader( new FileReader(fileEntity));
+        try (BufferedReader in = Files.newBufferedReader(fileEntity)) {
             inputLine = in.readLine() ;
-            in.close();
         } catch (FileNotFoundException e) {
             Control.presenceLog.log(Level.SEVERE, "Entity File not found ", e) ;
-            Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
+            Control.presenceLog.severe("File " + fileEntity) ;
         } catch (IOException e) {
             Control.presenceLog.log(Level.SEVERE, "IO exception reading entity File", e) ;
-            Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
+            Control.presenceLog.severe("File " + fileEntity) ;
         }
         Control.presenceLog.finer("Load entity name : " + inputLine) ;
         return inputLine ;
@@ -148,18 +134,18 @@ public class StorageEntity {
     public void storeEntity(PresenceAgenda agd) {
         
         // (Re)Create the file
-        if (fileEntity.exists()) {
-            if (! fileEntity.delete()) {
-                Control.presenceLog.severe("Cannot delete entity file: " + fileEntity.getAbsolutePath()) ;
-            }
-        }
-        try {
-            if (fileEntity.createNewFile()) {
-                
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileEntity)));
-                
+    	if (Files.exists(fileEntity)) {
+    		try {
+    			Files.delete(fileEntity) ;
+    		} catch (Exception e) {
+    			Control.presenceLog.severe("Cannot delete entity file: " + fileEntity) ;
+    		}
+    	}
+        try (BufferedWriter out = Files.newBufferedWriter(fileEntity)){
+                         
                 // store the name in the file
-                out.println(name) ;
+                out.append(name) ;
+                out.newLine() ;
             
                 // store the presence agenda in the file
                 Period[] periods = agd.getPeriods() ;
@@ -171,152 +157,133 @@ public class StorageEntity {
                 }
                 out.close() ;
                
-            }
+          
         } catch (IOException e) {
             Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e) ;
-            Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
+            Control.presenceLog.severe("File " + fileEntity) ;
         }
     }
     
     public void addPresence(Period p) {
 
-        PrintWriter out;
-        try {
-            // Create the file if it does not exists
-            if (fileEntity.exists()) {
-                out = new PrintWriter(new BufferedWriter(new FileWriter(fileEntity, true)));
-            } else {
-                if (fileEntity.createNewFile()) {
-                    out = new PrintWriter(new BufferedWriter(new FileWriter(fileEntity)));
-                    
-                    // store the name in the file
-                    out.println(name) ;
-                } else {
-                    throw new IOException("IO exception creating entity file") ;
-                }
-            }
-            addDate(out, p.getBegin(), p.getCommentIn(), inMark) ;
-            if (p.getEnd() != null) {
-                addDate(out, p.getEnd(), p.getCommentOut(), outMark) ;
-            }
-            out.close() ;
+    	try (BufferedWriter out = Files.newBufferedWriter(fileEntity)){
 
-        } catch (IOException e) {
-            Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
-            Control.presenceLog.severe("File " + fileEntity.getAbsolutePath());
-        }
+    		// store the name in the file
+    		out.append(name) ;
+    		out.newLine() ;
+
+    		addDate(out, p.getBegin(), p.getCommentIn(), inMark) ;
+    		if (p.getEnd() != null) {
+    			addDate(out, p.getEnd(), p.getCommentOut(), outMark) ;
+    		}
+    		out.close() ;
+
+    	} catch (IOException e) {
+    		Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
+    		Control.presenceLog.severe("File " + fileEntity);
+    	}
 
     }
     
     public void addEndDate(Date d, String comment) {
         
-        PrintWriter out;
         Control.presenceLog.finer("Add end date " + dateFormat.format(d) + " to storage entity " + name) ;
-        try {
+        try (BufferedWriter out = Files.newBufferedWriter(fileEntity)){
             // Create the file if it does not exists
-            if (fileEntity.exists()) {
+            if (Files.exists(fileEntity)) {
                
-                out = new PrintWriter(new BufferedWriter(new FileWriter(fileEntity, true)));
                 Period lastPeriod = getLastPeriod() ;
                 if (lastPeriod.getEnd() != null) {
                 	 out.close() ;
                     throw new IllegalArgumentException("Trying to write a end date instead of begin") ;                   
                 }
             } else {
+            	out.close() ;
                 throw new IllegalArgumentException("Trying to write an end date to a empty file") ;             
             }
             addDate(out, d, comment, outMark) ;
-
-            out.close() ;
+            
         } catch (IOException e) {
             Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
-            Control.presenceLog.severe("File " + fileEntity.getAbsolutePath());
+            Control.presenceLog.severe("File " + fileEntity);
         }         
     }
     
     public void addBeginDate(Date d, String comment) {
         
-        PrintWriter out;
         Control.presenceLog.finer("Add begin date " + dateFormat.format(d) + " to storage entity " + name) ;
-        try {
-            // Create the file if it does not exists
-            if (fileEntity.exists()) {
-               
-                out = new PrintWriter(new BufferedWriter(new FileWriter(fileEntity, true)));
-                Period lastPeriod = getLastPeriod() ;
-                if (lastPeriod.getEnd() == null) {
-                	out.close() ;
-                    throw new IllegalArgumentException("Trying to write a begin date instead of end") ;
-                }
-            } else {
-                if (fileEntity.createNewFile()) {
-                    out = new PrintWriter(new BufferedWriter(new FileWriter(fileEntity)));
+        try (BufferedWriter out = Files.newBufferedWriter(fileEntity)){
 
-                    // store the name in the file
-                    out.println(name);
-                } else {
-                    throw new IOException("IO exception creating entity file");
-                }
+        	// Create the file if it does not exists
+        	if (! Files.exists(fileEntity)) {
+
+        		// store the name in the file
+        		out.write(name) ;
+        		out.newLine() ;
+        	}
+            Period lastPeriod = getLastPeriod() ;
+            if (lastPeriod.getEnd() == null) {
+            	out.close() ;
+                throw new IllegalArgumentException("Trying to write a begin date instead of end") ;
             }
             addDate(out, d, comment, inMark) ;
            
-            out.close() ;
         } catch (IOException e) {
             Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
-            Control.presenceLog.severe("File " + fileEntity.getAbsolutePath());
+            Control.presenceLog.severe("File " + fileEntity);
         }         
     }
     
     public Period getLastPeriod() throws IOException {
         // WARNING : works if there is at least 2 lines (one complete period)
         
-        BufferedReader in = new BufferedReader( new FileReader(fileEntity));
-        String inputLine = "" ;
-        String lastInputLine = null;
-        String beforeLastInputLine = null;
-        
-        // read all lines
-        while ((inputLine = in.readLine()) != null) {
-            beforeLastInputLine = lastInputLine ;
-            lastInputLine = inputLine ;
-        }
-        
-        // analyse before last line
-        String[] beforeLastFields = beforeLastInputLine.split(commentSeparator) ;
-        
-        // analyse last line
-        String[] lastFields = lastInputLine.split(commentSeparator) ;
-        
-        Period p = null;
-        try { 
-            if (isIn(beforeLastFields)) {
-                // 2 last lines are in out
-                p = new Period(getFieldDate(beforeLastFields), getFieldDate(lastFields), getFieldComment(beforeLastFields), getFieldComment(lastFields)) ;
-            } else {
-                // 2 last line are out in
-                p = new Period(getFieldDate(lastFields), null, getFieldComment(lastFields), "") ;
-            }
-        } catch(ParseException e) {
-            Control.presenceLog.log(Level.SEVERE, "Parse entity file error ", e) ;
-            Control.presenceLog.severe("File " + fileEntity.getAbsolutePath()) ;
-        }
-
-        // close file
-        in.close();
-        if (p != null) {
-            Control.presenceLog.finer("GetLastPeriod: begin=" + dateFormat.format(p.getBegin())) ;
-            if (p.getEnd() != null)   Control.presenceLog.finer(" End=" + dateFormat.format(p.getEnd())) ;
+    	Period p = null;
+        try (BufferedReader in = Files.newBufferedReader(fileEntity)) {
+	        String inputLine = "" ;
+	        String lastInputLine = null;
+	        String beforeLastInputLine = null;
+	        
+	        // read all lines
+	        while ((inputLine = in.readLine()) != null) {
+	            beforeLastInputLine = lastInputLine ;
+	            lastInputLine = inputLine ;
+	        }
+	        
+	        // analyse before last line
+	        String[] beforeLastFields = beforeLastInputLine.split(commentSeparator) ;
+	        
+	        // analyse last line
+	        String[] lastFields = lastInputLine.split(commentSeparator) ;
+	        
+	        try { 
+	            if (isIn(beforeLastFields)) {
+	                // 2 last lines are in out
+	                p = new Period(getFieldDate(beforeLastFields), getFieldDate(lastFields), getFieldComment(beforeLastFields), getFieldComment(lastFields)) ;
+	            } else {
+	                // 2 last line are out in
+	                p = new Period(getFieldDate(lastFields), null, getFieldComment(lastFields), "") ;
+	            }
+	        } catch(ParseException e) {
+	            Control.presenceLog.log(Level.SEVERE, "Parse entity file error ", e) ;
+	            Control.presenceLog.severe("File " + fileEntity) ;
+	        }
+	
+	        if (p != null) {
+	            Control.presenceLog.finer("GetLastPeriod: begin=" + dateFormat.format(p.getBegin())) ;
+	            if (p.getEnd() != null)   Control.presenceLog.finer(" End=" + dateFormat.format(p.getEnd())) ;
+	        }
         }
         return p;
     }
     
-    private void addDate(PrintWriter out, Date d, String c, String mark) {
+    private void addDate(BufferedWriter out, Date d, String c, String mark) throws IOException {
         
-        out.print(mark) ;
-        out.print(commentSeparator) ;
-        out.print(dateFormat.format(d)) ;
-        out.print(commentSeparator) ;
-        out.println(c) ;
+        out.write(mark) ;
+        out.write(commentSeparator) ;
+        out.write(dateFormat.format(d)) ;
+        out.write(commentSeparator) ;
+        out.write(c) ;
+        out.newLine() ;
         
     }
 }

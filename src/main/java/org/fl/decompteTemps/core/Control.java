@@ -7,9 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.decompteTemps.util.AgendaFormat;
-
-import com.ibm.lge.fl.util.AdvancedProperties;
-import com.ibm.lge.fl.util.RunningContext;
+import org.fl.util.AdvancedProperties;
+import org.fl.util.RunningContext;
 
 public final class Control {
 

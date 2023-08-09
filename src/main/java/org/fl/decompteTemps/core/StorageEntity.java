@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.decompteTemps.core;
 
 import java.io.BufferedReader;
@@ -10,9 +34,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StorageEntity {
 
+	private static final Logger presenceLog = Control.getLogger();
+	
     private final Path   fileEntity ;
     private final String name ;
     
@@ -59,12 +86,12 @@ public class StorageEntity {
     			lineNumber = lineNumber + 2 ;
     			// read in line
     			inFields = inputLine.split(commentSeparator) ;
-    			Control.presenceLog.finer("Find presence in date " + inputLine) ;
+    			presenceLog.finer("Find presence in date " + inputLine) ;
             
     			// read  out line
     			if ((inputLine = in.readLine()) != null) {
     				outFields = inputLine.split(commentSeparator) ;
-    				Control.presenceLog.finer("Find presence out date " + inputLine) ;
+    				presenceLog.finer("Find presence out date " + inputLine) ;
     			} else {
     				outFields = null ;
     			}
@@ -78,14 +105,14 @@ public class StorageEntity {
     		}
       
     	} catch (ParseException e) {
-    		Control.presenceLog.log(Level.SEVERE, "Parse entity file error, line " + lineNumber, e) ;
-    		Control.presenceLog.severe("File " + fileEntity) ;
+    		presenceLog.log(Level.SEVERE, "Parse entity file error, line " + lineNumber, e) ;
+    		presenceLog.severe("File " + fileEntity) ;
     	} catch (IOException e) {
-    		Control.presenceLog.log(Level.SEVERE, "IO exception reading entity File, line " + lineNumber, e) ;
-    		Control.presenceLog.severe("File " + fileEntity) ;
+    		presenceLog.log(Level.SEVERE, "IO exception reading entity File, line " + lineNumber, e) ;
+    		presenceLog.severe("File " + fileEntity) ;
     	}  catch (Exception e) {
-    		Control.presenceLog.log(Level.SEVERE, "Exception reading entity File, line " + lineNumber, e) ;
-    		Control.presenceLog.severe("File " + fileEntity) ;
+    		presenceLog.log(Level.SEVERE, "Exception reading entity File, line " + lineNumber, e) ;
+    		presenceLog.severe("File " + fileEntity) ;
     	}
 
        return agd ;
@@ -121,13 +148,13 @@ public class StorageEntity {
         try (BufferedReader in = Files.newBufferedReader(fileEntity)) {
             inputLine = in.readLine() ;
         } catch (FileNotFoundException e) {
-            Control.presenceLog.log(Level.SEVERE, "Entity File not found ", e) ;
-            Control.presenceLog.severe("File " + fileEntity) ;
+            presenceLog.log(Level.SEVERE, "Entity File not found ", e) ;
+            presenceLog.severe("File " + fileEntity) ;
         } catch (IOException e) {
-            Control.presenceLog.log(Level.SEVERE, "IO exception reading entity File", e) ;
-            Control.presenceLog.severe("File " + fileEntity) ;
+            presenceLog.log(Level.SEVERE, "IO exception reading entity File", e) ;
+            presenceLog.severe("File " + fileEntity) ;
         }
-        Control.presenceLog.finer("Load entity name : " + inputLine) ;
+        presenceLog.finer("Load entity name : " + inputLine) ;
         return inputLine ;
     }
 
@@ -138,7 +165,7 @@ public class StorageEntity {
     		try {
     			Files.delete(fileEntity) ;
     		} catch (Exception e) {
-    			Control.presenceLog.severe("Cannot delete entity file: " + fileEntity) ;
+    			presenceLog.severe("Cannot delete entity file: " + fileEntity) ;
     		}
     	}
         try (BufferedWriter out = Files.newBufferedWriter(fileEntity)){
@@ -159,8 +186,8 @@ public class StorageEntity {
                
           
         } catch (IOException e) {
-            Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e) ;
-            Control.presenceLog.severe("File " + fileEntity) ;
+            presenceLog.log(Level.SEVERE, "IO exception writing entity File", e) ;
+            presenceLog.severe("File " + fileEntity) ;
         }
     }
     
@@ -179,15 +206,15 @@ public class StorageEntity {
     		out.close() ;
 
     	} catch (IOException e) {
-    		Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
-    		Control.presenceLog.severe("File " + fileEntity);
+    		presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
+    		presenceLog.severe("File " + fileEntity);
     	}
 
     }
     
     public void addEndDate(Date d, String comment) {
         
-        Control.presenceLog.finer("Add end date " + dateFormat.format(d) + " to storage entity " + name) ;
+        presenceLog.finer("Add end date " + dateFormat.format(d) + " to storage entity " + name) ;
         try (BufferedWriter out = Files.newBufferedWriter(fileEntity)){
             // Create the file if it does not exists
             if (Files.exists(fileEntity)) {
@@ -204,14 +231,14 @@ public class StorageEntity {
             addDate(out, d, comment, outMark) ;
             
         } catch (IOException e) {
-            Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
-            Control.presenceLog.severe("File " + fileEntity);
+            presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
+            presenceLog.severe("File " + fileEntity);
         }         
     }
     
     public void addBeginDate(Date d, String comment) {
         
-        Control.presenceLog.finer("Add begin date " + dateFormat.format(d) + " to storage entity " + name) ;
+        presenceLog.finer("Add begin date " + dateFormat.format(d) + " to storage entity " + name) ;
         try (BufferedWriter out = Files.newBufferedWriter(fileEntity)){
 
         	// Create the file if it does not exists
@@ -229,8 +256,8 @@ public class StorageEntity {
             addDate(out, d, comment, inMark) ;
            
         } catch (IOException e) {
-            Control.presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
-            Control.presenceLog.severe("File " + fileEntity);
+            presenceLog.log(Level.SEVERE, "IO exception writing entity File", e);
+            presenceLog.severe("File " + fileEntity);
         }         
     }
     
@@ -264,13 +291,13 @@ public class StorageEntity {
 	                p = new Period(getFieldDate(lastFields), null, getFieldComment(lastFields), "") ;
 	            }
 	        } catch(ParseException e) {
-	            Control.presenceLog.log(Level.SEVERE, "Parse entity file error ", e) ;
-	            Control.presenceLog.severe("File " + fileEntity) ;
+	            presenceLog.log(Level.SEVERE, "Parse entity file error ", e) ;
+	            presenceLog.severe("File " + fileEntity) ;
 	        }
 	
 	        if (p != null) {
-	            Control.presenceLog.finer("GetLastPeriod: begin=" + dateFormat.format(p.getBegin())) ;
-	            if (p.getEnd() != null)   Control.presenceLog.finer(" End=" + dateFormat.format(p.getEnd())) ;
+	        	presenceLog.finer("GetLastPeriod: begin=" + dateFormat.format(p.getBegin())) ;
+	            if (p.getEnd() != null)   presenceLog.finer(" End=" + dateFormat.format(p.getEnd())) ;
 	        }
         }
         return p;

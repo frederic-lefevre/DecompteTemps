@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.decompteTemps.gui;
 
 import java.awt.GridLayout;
@@ -8,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,6 +48,8 @@ import org.fl.decompteTemps.util.StringFormat;
 
 public class EntreeMouvement {
 
+	private static final Logger presenceLog = Control.getLogger();
+	
 	private JPanel entreeMove ;
 	private JTextField jour ;
 	private JTextField heure ;
@@ -69,7 +96,7 @@ public class EntreeMouvement {
 				} else {
 					int presencePlace = gr.getPresencePlace();
 	                if (presencePlace == GroupEntity.MIXED) {
-	                	Control.presenceLog.severe("Mouvement de groupe alors que le groupe n'est pas au même endroit") ;
+	                	presenceLog.severe("Mouvement de groupe alors que le groupe n'est pas au même endroit") ;
 	                } else if (presencePlace == GroupEntity.IN) {
 	                	gr.addEndDate(d, comment);
 	                	msg.setText("Tous sortis le " + mvtDate) ;
@@ -79,9 +106,9 @@ public class EntreeMouvement {
 	                }
 				}
 			} catch (ParseException e) {
-				Control.presenceLog.severe("Exception when getting parsing date move " + e) ;
+				presenceLog.severe("Exception when getting parsing date move " + e) ;
 			} catch (IOException e) {
-				Control.presenceLog.severe("Exception when getting presence move " + e) ;
+				presenceLog.severe("Exception when getting presence move " + e) ;
 			}
 			
 			DecompteTempsGui.updateDecompteTemps() ;
@@ -151,7 +178,7 @@ public class EntreeMouvement {
 			presencePlace = completeGroup.getPresencePlace();
 		} catch (IOException e) {
 			presencePlace = GroupEntity.IN ;
-			 Control.presenceLog.severe("Exception when getting presence place: " + e) ;
+			 presenceLog.severe("Exception when getting presence place: " + e) ;
 		}
 		
 		try {
@@ -175,7 +202,7 @@ public class EntreeMouvement {
 				moveWho.addItem(lb) ;
 			}
 		} catch (IOException e) {
-			Control.presenceLog.severe("Exception when selecting direction " + e) ;
+			presenceLog.severe("Exception when selecting direction " + e) ;
 			e.printStackTrace();
 		}
 	}

@@ -37,7 +37,7 @@ import org.fl.util.RunningContext;
 public final class Control {
 
 	// logger Manager
-    public static Logger presenceLog ;
+    private static Logger presenceLog ;
     
     private static final String DEFAULT_PROP_FILE = "presence.properties";
 
@@ -96,6 +96,13 @@ public final class Control {
     }
     
 
+    public static Logger getLogger() {
+        if (! initialized) {
+        	forceInit() ;
+        }
+        return presenceLog;
+    }
+    
     /**
      * @return Returns the presenceDirectoryName.
      */

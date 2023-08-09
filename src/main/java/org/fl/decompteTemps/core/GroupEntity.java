@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.decompteTemps.core;
 
 import java.io.IOException;
@@ -6,9 +30,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 public class GroupEntity {
     
+	private static final Logger presenceLog = Control.getLogger();
+	
     private final static String dateFrancePattern 		   = "EEEE dd MMMM yyyy à HH:mm:ss.SSS" ;
     private final static SimpleDateFormat dateFranceFormat = new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);
     
@@ -25,34 +52,34 @@ public class GroupEntity {
     
     public long getPresenceDurationTotal(Date a, Date b) {
         if (a.after(b)) {
-            Control.presenceLog.warning("Begin is after end") ;
+            presenceLog.warning("Begin is after end") ;
             throw new IllegalArgumentException("Begin is after end") ;
         }
-        Control.presenceLog.finer("Total presence between " + dateFranceFormat.format(a) + " and "  + dateFranceFormat.format(b)) ;
+        presenceLog.finer("Total presence between " + dateFranceFormat.format(a) + " and "  + dateFranceFormat.format(b)) ;
         long duration = 0 ;
         for (int i=0; i < entities.size(); i++) {
             duration = duration + ((Entity)entities.get(i)).getPresenceDuration(a, b) ;
-            Control.presenceLog.finer("Presence duration for " + ((Entity)entities.get(i)).getName() + " " + duration) ;
+            presenceLog.finer("Presence duration for " + ((Entity)entities.get(i)).getName() + " " + duration) ;
         }
         return duration ;
     }
     
     public long getPresenceDurationPerEntity(Date a, Date b) {
         if (a.after(b))  {
-            Control.presenceLog.warning("Begin is after end") ;
+            presenceLog.warning("Begin is after end") ;
             throw new IllegalArgumentException("Begin is after end") ;
         }
         long duration = 0 ;
         for (int i=0; i < entities.size(); i++) {
             duration = duration + ((Entity)entities.get(i)).getPresenceDuration(a, b) ;
         }
-        Control.presenceLog.finer("Presence duration between " + dateFranceFormat.format(a) + " and "  + dateFranceFormat.format(b) + "= " + duration) ;
+        presenceLog.finer("Presence duration between " + dateFranceFormat.format(a) + " and "  + dateFranceFormat.format(b) + "= " + duration) ;
         return (duration / entities.size()) ;
     }
     
     public float getPresencePercentage(Date a, Date b) {
         if (a.after(b)) {
-            Control.presenceLog.warning("Begin is after end") ;
+           presenceLog.warning("Begin is after end") ;
             throw new IllegalArgumentException("Begin is after end") ;
         }
         float duration = b.getTime() - a.getTime() ;

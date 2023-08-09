@@ -1,10 +1,37 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.decompteTemps.core;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class Entity {
 
+	private static final Logger presenceLog = Control.getLogger();
+	
     private String name;
     
     private PresenceAgenda presence ;
@@ -34,7 +61,7 @@ public class Entity {
      */
     public long getPresenceDuration(Date a, Date b) {
         if (a.after(b)) {
-            Control.presenceLog.warning("Begin is after end") ;
+            presenceLog.warning("Begin is after end") ;
             throw new IllegalArgumentException("Begin is after end") ;
         }
         return presence.getDuration(a, b) ;
@@ -48,7 +75,7 @@ public class Entity {
      */
     public float getPresencePercentage(Date a, Date b) {
         if (a.after(b)) {
-            Control.presenceLog.warning("Begin is after end") ;
+            presenceLog.warning("Begin is after end") ;
             throw new IllegalArgumentException("Begin is after end") ;
         }
         float duration = b.getTime() - a.getTime() ;
@@ -65,7 +92,7 @@ public class Entity {
      */
     public void addPresence(Date a, Date b, String ci, String co) {
         if (a.after(b)) {
-            Control.presenceLog.warning("Begin is after end") ;
+            presenceLog.warning("Begin is after end") ;
             throw new IllegalArgumentException("Begin is after end") ;
         }
         Period p = new Period(a, b, ci, co) ; 

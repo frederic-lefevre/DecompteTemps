@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ import org.fl.decompteTemps.core.GroupEntity;
 
 public class GestionGroupe {
 
-	private static final Logger presenceLog = Control.getLogger();
+	private static final Logger presenceLog = Logger.getLogger(GestionGroupe.class.getName());
 	
 	private JPanel gestionGrp ;
 	private JComboBox<String> choixGr;
@@ -74,10 +74,10 @@ public class GestionGroupe {
 		JPanel lectureEcriture = new JPanel() ;
 		lectureEcriture.setLayout(new GridLayout(1, 2, 5, 5)) ;
 		
-		relecture = new JButton("Relecture de donn�es") ;
+		relecture = new JButton("Relire les données") ;
 		lectureEcriture.add(relecture) ;
 		
-		reecriture = new JButton("R�ecrire les donn�es") ;
+		reecriture = new JButton("Réécrire les données") ;
 		lectureEcriture.add(reecriture) ;
 		
 		gestionGrp.add(lectureEcriture) ;
@@ -129,7 +129,7 @@ public class GestionGroupe {
 		
 		public void actionPerformed(ActionEvent arg0) {
 			
-			Control.forceInit() ;
+			Control.init() ;
 			DecompteTempsGui.updateDecompteTemps() ;
 		}
 	}

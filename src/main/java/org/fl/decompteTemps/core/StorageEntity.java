@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 
 public class StorageEntity {
 
-	private static final Logger presenceLog = Control.getLogger();
+	private static final Logger presenceLog = Logger.getLogger(StorageEntity.class.getName());
 	
     private final Path   fileEntity ;
     private final String name ;
@@ -105,14 +105,11 @@ public class StorageEntity {
     		}
       
     	} catch (ParseException e) {
-    		presenceLog.log(Level.SEVERE, "Parse entity file error, line " + lineNumber, e) ;
-    		presenceLog.severe("File " + fileEntity) ;
+    		presenceLog.log(Level.SEVERE, "Parse entity file " + fileEntity + "error, line " + lineNumber, e);
     	} catch (IOException e) {
-    		presenceLog.log(Level.SEVERE, "IO exception reading entity File, line " + lineNumber, e) ;
-    		presenceLog.severe("File " + fileEntity) ;
+    		presenceLog.log(Level.SEVERE, "IO exception reading entity file " + fileEntity + ", line " + lineNumber, e);
     	}  catch (Exception e) {
-    		presenceLog.log(Level.SEVERE, "Exception reading entity File, line " + lineNumber, e) ;
-    		presenceLog.severe("File " + fileEntity) ;
+    		presenceLog.log(Level.SEVERE, "Exception reading entity file \" + fileEntity + \", line " + lineNumber, e);
     	}
 
        return agd ;

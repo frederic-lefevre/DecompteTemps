@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -82,7 +82,7 @@ public class DecompteTempsGui extends JFrame {
 		
 		setBounds(50, 50, 1600, 900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("D�compte temps") ;
+		setTitle("Décompte temps") ;
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		
 		// Titre de la statistique

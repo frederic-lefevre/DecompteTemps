@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 
 public class StorageGroup {
 
-	private static final Logger presenceLog = Control.getLogger();
+	private static final Logger presenceLog = Logger.getLogger(StorageGroup.class.getName());
 	
     private final GroupEntity group ;
     private static final String ENTITY_EXTENTION = ".entity"; ;

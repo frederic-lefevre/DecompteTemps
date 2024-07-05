@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 
 public class GroupEntity {
     
-	private static final Logger presenceLog = Control.getLogger();
+	private static final Logger presenceLog = Logger.getLogger(GroupEntity.class.getName());
 	
     private final static String dateFrancePattern 		   = "EEEE dd MMMM yyyy à HH:mm:ss.SSS" ;
     private final static SimpleDateFormat dateFranceFormat = new SimpleDateFormat(dateFrancePattern, Locale.FRANCE);

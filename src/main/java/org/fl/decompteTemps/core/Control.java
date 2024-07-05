@@ -41,14 +41,15 @@ public final class Control {
     
     private static final String DEFAULT_PROP_FILE = "presence.properties";
 
-    private static Path presenceDirectoryName;
+    private static Path presenceDirectoryName = null;
 
-    private static boolean initialized = false ; 
+    private static boolean initialized = false; 
     
-    private static GroupEntity completeGroup ;
-    private static GroupEntity currentGroup ;
+    private static StorageGroup storageGroup;
+    private static GroupEntity completeGroup;
+    private static GroupEntity currentGroup;
     
-    private static Date    endDate ;
+    private static Date    endDate = null;
     private static boolean endDateIsNow ;
     
     public static void init() {
@@ -58,53 +59,45 @@ public final class Control {
         }
     }
 
-    public static void forceInit() {
-    	
-    	//access to properties and logger
+	private static void forceInit() {
+
+		// access to properties and logger
 		RunningContext tempsRunningContext = new RunningContext("DecompteTemps", null, DEFAULT_PROP_FILE);
-	
-		AdvancedProperties props = tempsRunningContext.getProps() ;
 
-        // Get the root directory
-        presenceDirectoryName = props.getPathFromURI("presence.rootDir.name") ;
-    
-        // Get the end date
-        String ed = props.getProperty("presence.endDate") ;
-        if ((ed == null) || ed.isEmpty()) {
-        	// if end date is not defined, end date is now
-        	endDate = new Date() ;
-        	endDateIsNow = true ;
-        } else {
-	        try {
-	        	endDateIsNow = false ;
-				endDate = AgendaFormat.getDate(ed, "00", "00") ;
+		AdvancedProperties props = tempsRunningContext.getProps();
+
+		// Get the root directory
+		presenceDirectoryName = props.getPathFromURI("presence.rootDir.name");
+
+		// Get the end date
+		String ed = props.getProperty("presence.endDate");
+		if ((ed == null) || ed.isEmpty()) {
+			// if end date is not defined, end date is now
+			endDate = new Date();
+			endDateIsNow = true;
+		} else {
+			try {
+				endDateIsNow = false;
+				endDate = AgendaFormat.getDate(ed, "00", "00");
 			} catch (ParseException e) {
-				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propriété presence.endDate: ", e) ;
-				endDate = new Date() ;
-				endDateIsNow = true ;
+				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propriété presence.endDate: ", e);
+				endDate = new Date();
+				endDateIsNow = true;
 			}
-        }
-        
-        StorageGroup st = new StorageGroup(presenceDirectoryName);
-        completeGroup = st.getGroupEntity() ;
-        currentGroup = st.getGroupEntity() ;
-        
-        initialized = true ;
-    }
-    
+		}
 
-    public static Logger getLogger() {
-        if (! initialized) {
-        	forceInit() ;
-        }
-        return presenceLog;
-    }
+		storageGroup = new StorageGroup(presenceDirectoryName);
+		completeGroup = storageGroup.getGroupEntity();
+		currentGroup = storageGroup.getGroupEntity();
+
+		initialized = true;
+	}
     
     /**
      * @return Returns the presenceDirectoryName.
      */
     public static Path getPresenceDirectoryName() {
-        if (! initialized) {
+        if (presenceDirectoryName == null) {
         	forceInit() ;
         }
         return presenceDirectoryName;
@@ -152,7 +145,7 @@ public final class Control {
     }
 
 	public static Date getEndDate() {
-        if (! initialized) {
+        if (endDate == null) {
         	forceInit() ;
         }
 		if (endDateIsNow) {

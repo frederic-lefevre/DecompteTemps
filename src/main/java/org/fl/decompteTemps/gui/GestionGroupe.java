@@ -74,10 +74,10 @@ public class GestionGroupe {
 		JPanel lectureEcriture = new JPanel() ;
 		lectureEcriture.setLayout(new GridLayout(1, 2, 5, 5)) ;
 		
-		relecture = new JButton("Relecture de donn�es") ;
+		relecture = new JButton("Relire les données") ;
 		lectureEcriture.add(relecture) ;
 		
-		reecriture = new JButton("R�ecrire les donn�es") ;
+		reecriture = new JButton("Réécrire les données") ;
 		lectureEcriture.add(reecriture) ;
 		
 		gestionGrp.add(lectureEcriture) ;

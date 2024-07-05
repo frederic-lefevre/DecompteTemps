@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +74,7 @@ public class StatGlobaleTable {
 			result[i][2] = AgendaFormat.durationToString(enfants[i].getPresenceDuration()) ;
 			result[i][3] = enfants[i].getPresencePercentage(beginPresence, endDate) ;
 		} 
-		result[enfants.length][0] = "Pr�sence" ;
+		result[enfants.length][0] = "Présence" ;
 		result[enfants.length][1] = AgendaFormat.durationToString(gr.getPresenceDurationTotal(beginPresence, endDate)) ;
 		result[enfants.length][2] = AgendaFormat.durationToString(presPerEntity) ;
 		result[enfants.length][3] = gr.getPresencePercentage(beginPresence, endDate) ;

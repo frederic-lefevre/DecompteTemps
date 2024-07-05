@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl.DecompteTemps</groupId>
 	<artifactId>DecompteTemps</artifactId>
-	<version>1.7.2</version>
+	<version>1.8.0</version>
 	<name>Decompte temps</name>
 
 	<dependencies>
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.2</version>
+			<version>5.10.3</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -41,7 +41,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.12.1</version>
+				<version>3.13.0</version>
 			</plugin>
 			<plugin>
                 <groupId>io.github.git-commit-id</groupId>

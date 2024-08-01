@@ -4,14 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl.DecompteTemps</groupId>
 	<artifactId>DecompteTemps</artifactId>
-	<version>1.8.0</version>
+	<version>1.8.1</version>
 	<name>Decompte temps</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.fl.FlUtils</groupId>
 			<artifactId>FlUtils</artifactId>
-			<version>5.1.0</version>
+			<version>5.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -46,7 +46,7 @@
 			<plugin>
                 <groupId>io.github.git-commit-id</groupId>
 				<artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>5.0.0</version>
+                <version>7.0.0</version>
 				<executions>
 					<execution>
 						<goals>

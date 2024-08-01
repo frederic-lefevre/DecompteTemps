@@ -62,7 +62,7 @@ public final class Control {
 	private static void forceInit() {
 
 		// access to properties and logger
-		RunningContext tempsRunningContext = new RunningContext("DecompteTemps", null, DEFAULT_PROP_FILE);
+		RunningContext tempsRunningContext = new RunningContext("org.fl.decompteTemps", null, DEFAULT_PROP_FILE);
 
 		AdvancedProperties props = tempsRunningContext.getProps();
 

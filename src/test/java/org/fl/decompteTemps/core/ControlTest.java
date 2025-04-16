@@ -27,7 +27,10 @@ package org.fl.decompteTemps.core;
 import static org.assertj.core.api.Assertions.*;
 
 import org.fl.decompteTemps.gui.DecompteTempsGui;
+import org.fl.util.RunningContext;
 import org.junit.jupiter.api.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 class ControlTest {
 
@@ -37,5 +40,30 @@ class ControlTest {
 		Control.init(DecompteTempsGui.getPropertyFile());
 		
 		assertThat(Control.getPresenceDirectoryName()).isNotNull();
+	}
+	
+	@Test
+	void runningContextTest() {
+		
+		RunningContext runningContext = Control.getRunningContext();
+		
+		assertThat(runningContext).isNotNull();
+		assertThat(runningContext.getName()).isNotNull().isEqualTo("org.fl.decompteTemps");
+		
+		JsonNode applicationInfo = runningContext.getApplicationInfo(false);
+		assertThat(applicationInfo).isNotNull();
+		
+		JsonNode buildInformation = applicationInfo.get("buildInformation");
+		assertThat(buildInformation).isNotEmpty().hasSize(2)
+		.satisfiesExactlyInAnyOrder(
+				buildInfo -> { 
+					assertThat(buildInfo.get("moduleName")).isNotNull();
+					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.decompteTemps");
+				},
+				buildInfo -> { 
+					assertThat(buildInfo.get("moduleName")).isNotNull();
+					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.util");
+				}
+				);
 	}
 }

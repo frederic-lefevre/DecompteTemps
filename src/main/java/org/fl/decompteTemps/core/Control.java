@@ -45,6 +45,7 @@ public final class Control {
 
     private static boolean initialized = false; 
     
+    private static RunningContext runningContext;
     private static StorageGroup storageGroup;
     private static GroupEntity completeGroup;
     private static GroupEntity currentGroup;
@@ -56,9 +57,9 @@ public final class Control {
 
         if (! initialized) {
     		// access to properties and logger
-    		RunningContext tempsRunningContext = new RunningContext("org.fl.decompteTemps", URI.create(propertyFile));
+    		runningContext = new RunningContext("org.fl.decompteTemps", URI.create(propertyFile));
 
-    		AdvancedProperties props = tempsRunningContext.getProps();
+    		AdvancedProperties props = runningContext.getProps();
 
     		// Get the root directory
     		presenceDirectoryName = props.getPathFromURI("presence.rootDir.name");
@@ -98,7 +99,13 @@ public final class Control {
         return presenceDirectoryName;
     }
     
-	
+    public static RunningContext getRunningContext() {
+        if (! initialized) {
+        	init(DecompteTempsGui.getPropertyFile());
+        }
+		return runningContext;
+	}
+    
     public static GroupEntity getCurrentGroup() {
         if (! initialized) {
         	init(DecompteTempsGui.getPropertyFile());

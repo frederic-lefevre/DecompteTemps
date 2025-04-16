@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.decompteTemps.gui.DecompteTempsGui;
 import org.fl.decompteTemps.util.AgendaFormat;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
@@ -39,8 +40,6 @@ public final class Control {
 
 	// logger Manager
     private static final Logger presenceLog = Logger.getLogger(Control.class.getName());
-    
-    private static final String DEFAULT_PROP_FILE = "presence.properties";
 
     private static Path presenceDirectoryName = null;
 
@@ -50,56 +49,51 @@ public final class Control {
     private static GroupEntity completeGroup;
     private static GroupEntity currentGroup;
     
-    private static Date    endDate = null;
+    private static Date endDate = null;
     private static boolean endDateIsNow ;
     
-    public static void init() {
+    public static void init(String propertyFile) {
 
         if (! initialized) {
-        	forceInit() ;
+    		// access to properties and logger
+    		RunningContext tempsRunningContext = new RunningContext("org.fl.decompteTemps", URI.create(propertyFile));
+
+    		AdvancedProperties props = tempsRunningContext.getProps();
+
+    		// Get the root directory
+    		presenceDirectoryName = props.getPathFromURI("presence.rootDir.name");
+
+    		// Get the end date
+    		String ed = props.getProperty("presence.endDate");
+    		if ((ed == null) || ed.isEmpty()) {
+    			// if end date is not defined, end date is now
+    			endDate = new Date();
+    			endDateIsNow = true;
+    		} else {
+    			try {
+    				endDateIsNow = false;
+    				endDate = AgendaFormat.getDate(ed, "00", "00");
+    			} catch (ParseException e) {
+    				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propriété presence.endDate: ", e);
+    				endDate = new Date();
+    				endDateIsNow = true;
+    			}
+    		}
+
+    		storageGroup = new StorageGroup(presenceDirectoryName);
+    		completeGroup = storageGroup.getGroupEntity();
+    		currentGroup = storageGroup.getGroupEntity();
+
+    		initialized = true;
         }
     }
 
-	private static void forceInit() {
-
-		// access to properties and logger
-		RunningContext tempsRunningContext = new RunningContext("org.fl.decompteTemps", URI.create(DEFAULT_PROP_FILE));
-
-		AdvancedProperties props = tempsRunningContext.getProps();
-
-		// Get the root directory
-		presenceDirectoryName = props.getPathFromURI("presence.rootDir.name");
-
-		// Get the end date
-		String ed = props.getProperty("presence.endDate");
-		if ((ed == null) || ed.isEmpty()) {
-			// if end date is not defined, end date is now
-			endDate = new Date();
-			endDateIsNow = true;
-		} else {
-			try {
-				endDateIsNow = false;
-				endDate = AgendaFormat.getDate(ed, "00", "00");
-			} catch (ParseException e) {
-				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propriété presence.endDate: ", e);
-				endDate = new Date();
-				endDateIsNow = true;
-			}
-		}
-
-		storageGroup = new StorageGroup(presenceDirectoryName);
-		completeGroup = storageGroup.getGroupEntity();
-		currentGroup = storageGroup.getGroupEntity();
-
-		initialized = true;
-	}
-    
     /**
      * @return Returns the presenceDirectoryName.
      */
     public static Path getPresenceDirectoryName() {
         if (presenceDirectoryName == null) {
-        	forceInit() ;
+        	init(DecompteTempsGui.getPropertyFile());
         }
         return presenceDirectoryName;
     }
@@ -107,21 +101,21 @@ public final class Control {
 	
     public static GroupEntity getCurrentGroup() {
         if (! initialized) {
-        	forceInit() ;
+        	init(DecompteTempsGui.getPropertyFile());
         }
 		return currentGroup;
 	}
 	
     public static void setCurrentGroup(GroupEntity gr) {
         if (! initialized) {
-        	forceInit() ;
+        	init(DecompteTempsGui.getPropertyFile());
         }
 		currentGroup = gr;
 	}
     
     public static GroupEntity getCompleteGroup() {
         if (! initialized) {
-        	forceInit() ;
+        	init(DecompteTempsGui.getPropertyFile());
         }
 		return completeGroup;
 	}
@@ -132,25 +126,25 @@ public final class Control {
      */
     public static GroupEntity getIndividualEntityAsGroups(String entityName) {
         
-        Entity e ;
+        Entity e;
         Entity[] entities = getCompleteGroup().getEntities();
         for (int i=0; i < entities.length; i++) {
-            e = (Entity)entities[i] ;
+            e = (Entity)entities[i];
             if (e.getName().equals(entityName)) {
-                GroupEntity res = new GroupEntity() ;
-                res.addEntity(e) ;
-                return res ;
+                GroupEntity res = new GroupEntity();
+                res.addEntity(e);
+                return res;
             }
         }
-        return null ;
+        return null;
     }
 
 	public static Date getEndDate() {
         if (endDate == null) {
-        	forceInit() ;
+        	init(DecompteTempsGui.getPropertyFile());
         }
 		if (endDateIsNow) {
-			endDate = new Date() ;
+			endDate = new Date();
 		}
 		return endDate;
 	}

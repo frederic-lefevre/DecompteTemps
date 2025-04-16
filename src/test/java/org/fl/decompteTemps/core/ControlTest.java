@@ -22,9 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+package org.fl.decompteTemps.core;
+
 import static org.assertj.core.api.Assertions.*;
 
-import org.fl.decompteTemps.core.Control;
+import org.fl.decompteTemps.gui.DecompteTempsGui;
 import org.junit.jupiter.api.Test;
 
 class ControlTest {
@@ -32,7 +34,7 @@ class ControlTest {
 	@Test
 	void controlTest() {
 		
-		Control.init();
+		Control.init(DecompteTempsGui.getPropertyFile());
 		
 		assertThat(Control.getPresenceDirectoryName()).isNotNull();
 	}

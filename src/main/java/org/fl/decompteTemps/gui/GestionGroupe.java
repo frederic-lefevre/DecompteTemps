@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,106 +50,105 @@ public class GestionGroupe {
 	private Entity[] enfants ;
 	
 	public GestionGroupe() {
-		
-		gestionGrp = new JPanel() ;
-		gestionGrp.setLayout(new GridLayout(2, 1, 5, 5)) ;
-		
+
+		gestionGrp = new JPanel();
+		gestionGrp.setLayout(new GridLayout(2, 1, 5, 5));
+
 		// Choix groupe
-		JPanel choixGroupe = new JPanel() ;
-		choixGroupe.setLayout(new GridLayout(1, 3, 5, 5)) ;
-		
-		choixGroupe.add(new JLabel("Enfants: ")) ;
-		
-		choixGr = new JComboBox<String>() ;
-		
-		update() ;
-		choixGroupe.add(choixGr) ;
-		
-		validerChoix = new JButton("Afficher") ;
-		choixGroupe.add(validerChoix) ;
-		
-		gestionGrp.add(choixGroupe) ;
-		
+		JPanel choixGroupe = new JPanel();
+		choixGroupe.setLayout(new GridLayout(1, 3, 5, 5));
+
+		choixGroupe.add(new JLabel("Enfants: "));
+
+		choixGr = new JComboBox<String>();
+
+		update();
+		choixGroupe.add(choixGr);
+
+		validerChoix = new JButton("Afficher");
+		choixGroupe.add(validerChoix);
+
+		gestionGrp.add(choixGroupe);
+
 		// Lecture et ecriture des fichiers
-		JPanel lectureEcriture = new JPanel() ;
-		lectureEcriture.setLayout(new GridLayout(1, 2, 5, 5)) ;
-		
-		relecture = new JButton("Relire les données") ;
-		lectureEcriture.add(relecture) ;
-		
-		reecriture = new JButton("Réécrire les données") ;
-		lectureEcriture.add(reecriture) ;
-		
-		gestionGrp.add(lectureEcriture) ;
-		
-		validerChoix.addActionListener(new ChoixGrpValide()) ;
-		reecriture.addActionListener(new ReecritureValide()) ;
-		relecture.addActionListener(new RelectureValide()) ;
+		JPanel lectureEcriture = new JPanel();
+		lectureEcriture.setLayout(new GridLayout(1, 2, 5, 5));
+
+		relecture = new JButton("Relire les données");
+		lectureEcriture.add(relecture);
+
+		reecriture = new JButton("Réécrire les données");
+		lectureEcriture.add(reecriture);
+
+		gestionGrp.add(lectureEcriture);
+
+		validerChoix.addActionListener(new ChoixGrpValide());
+		reecriture.addActionListener(new ReecritureValide());
+		relecture.addActionListener(new RelectureValide());
 	}
 
 	public JPanel getGestionGroupe() {
-		return gestionGrp ;
+		return gestionGrp;
 	}
-	
-	public void update() {
-		
-		GroupEntity completeGroup = Control.getCompleteGroup() ;
-		enfants = completeGroup.getEntities() ;
-		
-		choixGr.removeAllItems() ;
-		for (int i=0; i < enfants.length; i++) {
-			choixGr.addItem(enfants[i].getName()) ;
-		}
-		choixGr.addItem("Tous") ;
-		
-	}
-	
-	public class ChoixGrpValide implements ActionListener {
-		
-		public void actionPerformed(ActionEvent arg0) {
-			
-			GroupEntity completeGroup = Control.getCompleteGroup() ;
-			GroupEntity gr ;
 
-			int whoIdx = choixGr.getSelectedIndex() ;
-			presenceLog.info("Choix groupe index " + whoIdx) ;
-			
+	public void update() {
+
+		GroupEntity completeGroup = Control.getCompleteGroup();
+		enfants = completeGroup.getEntities();
+
+		choixGr.removeAllItems();
+		for (int i = 0; i < enfants.length; i++) {
+			choixGr.addItem(enfants[i].getName());
+		}
+		choixGr.addItem("Tous");
+
+	}
+
+	public class ChoixGrpValide implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+
+			GroupEntity completeGroup = Control.getCompleteGroup();
+			GroupEntity gr;
+
+			int whoIdx = choixGr.getSelectedIndex();
+			presenceLog.info("Choix groupe index " + whoIdx);
+
 			if (whoIdx < enfants.length) {
-				gr = Control.getIndividualEntityAsGroups( enfants[whoIdx].getName()) ;
+				gr = Control.getIndividualEntityAsGroups(enfants[whoIdx].getName());
 			} else {
-			    gr = completeGroup ;
+				gr = completeGroup;
 			}
-			Control.setCurrentGroup(gr) ;
-			
-			DecompteTempsGui.updateDecompteTemps() ;
+			Control.setCurrentGroup(gr);
+
+			DecompteTempsGui.updateDecompteTemps();
 		}
 	}
-	
+
 	public class RelectureValide implements ActionListener {
-		
+
 		public void actionPerformed(ActionEvent arg0) {
-			
-			Control.init() ;
-			DecompteTempsGui.updateDecompteTemps() ;
+
+			DecompteTempsGui.updateDecompteTemps();
 		}
 	}
 
 	public class ReecritureValide implements ActionListener {
-		
-		public void actionPerformed(ActionEvent arg0) {
-			
-			GroupEntity gr = Control.getCompleteGroup() ;
 
-	        if (gr != null) {
-	            Entity[] enfants = gr.getEntities();
-	            if ((enfants != null) && (enfants.length > 0)) {
-	                for (int i=0; i < enfants.length; i++) {
-	                    enfants[i].storeEntity() ;
-	                }
-	            
-	            }
-	        } 
-			DecompteTempsGui.updateDecompteTemps() ;
+		public void actionPerformed(ActionEvent arg0) {
+
+			GroupEntity gr = Control.getCompleteGroup();
+
+			if (gr != null) {
+				Entity[] enfants = gr.getEntities();
+				if ((enfants != null) && (enfants.length > 0)) {
+					for (int i = 0; i < enfants.length; i++) {
+						enfants[i].storeEntity();
+					}
+
+				}
+			}
+			DecompteTempsGui.updateDecompteTemps();
 		}
 	}
 }

@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.decompteTemps.core;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Date;
@@ -35,6 +36,7 @@ import org.fl.decompteTemps.gui.DecompteTempsGui;
 import org.fl.decompteTemps.util.AgendaFormat;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
+import org.fl.util.file.FilesUtils;
 
 public final class Control {
 
@@ -62,7 +64,13 @@ public final class Control {
     		AdvancedProperties props = runningContext.getProps();
 
     		// Get the root directory
-    		presenceDirectoryName = props.getPathFromURI("presence.rootDir.name");
+    		try {
+				presenceDirectoryName = FilesUtils.uriStringToAbsolutePath(props.getProperty("presence.rootDir.name"));
+			} catch (URISyntaxException e) {
+				String errorMessage = "Erreur de parsing sur la propriété presence.rootDir.name";
+				presenceLog.log(Level.SEVERE, errorMessage, e);
+				throw new IllegalArgumentException(errorMessage, e);
+			}
 
     		// Get the end date
     		String ed = props.getProperty("presence.endDate");

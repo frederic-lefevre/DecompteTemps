@@ -83,7 +83,7 @@ public class DecompteTempsGui extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public DecompteTempsGui() {
+	private DecompteTempsGui() {
 		
 		Date endDate = Control.getEndDate();
 		

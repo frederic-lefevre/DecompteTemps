@@ -27,10 +27,14 @@ package org.fl.decompteTemps.gui;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import org.fl.decompteTemps.core.Control;
+import org.fl.util.swing.ApplicationTabbedPane;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -48,12 +52,13 @@ public class DecompteTempsGui extends JFrame {
 	private static PresenceStatisticsTable tMois;
 	private static EntreeMouvement inMove;
 	
+	private static final Logger logger = Logger.getLogger(DecompteTempsGui.class.getName());
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		
-		Control.init(DEFAULT_PROP_FILE);
+		Control.init(getPropertyFile());
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -87,50 +92,64 @@ public class DecompteTempsGui extends JFrame {
 		
 		Date endDate = Control.getEndDate();
 		
+		ApplicationTabbedPane mainApplicationTabbedPanel = new ApplicationTabbedPane(Control.getRunningContext());
+				
 		setBounds(50, 50, 1600, 900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Décompte temps") ;
-		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		
-		// Titre de la statistique
-		st = new StatTitle(endDate);
-		getContentPane().add(st.getStatTitle());
+		try {
+			JPanel applicationPanel = new JPanel();
+			
+			applicationPanel.setLayout(new BoxLayout(applicationPanel, BoxLayout.Y_AXIS));
+			
+			// Titre de la statistique
+			st = new StatTitle(endDate);
+			applicationPanel.add(st.getStatTitle());
+
+			JPanel p1 = new JPanel();
+			p1.setLayout(new BoxLayout(p1, BoxLayout.X_AXIS));
+			p1.setPreferredSize(new Dimension(1500,300)) ;
+
+			JPanel p2  = new JPanel();
+			p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
+
+			// Formulaire gestion groupe
+			gestGrp = new GestionGroupe();
+			p2.add(gestGrp.getGestionGroupe());
+
+			// Formulaire entrée mouvement
+			inMove = new EntreeMouvement(endDate);
+			p2.add(inMove.getEntreeMouvement());
+
+			// Statistiques globales
+			tStat = new StatGlobaleTable();
+			JScrollPane statGlob = tStat.getStatGlobale();
+			p2.add(statGlob);
+
+			p1.add(p2);
+
+			// Table des mouvements
+			tMove = new MouvementTable();
+			JScrollPane tableMouv = tMove.getMouvementTable();
+			p1.add(tableMouv);
+
+			applicationPanel.add(p1);
+
+			// Statistiques détaillées par mois
+			tMois = new PresenceStatisticsTable(endDate);
+			JScrollPane tableMois = tMois.getPresenceStatTable();
+			tableMois.setMinimumSize(new Dimension(1500, 600));
+
+			applicationPanel.add(tableMois);
+
+			mainApplicationTabbedPanel.add(applicationPanel, "Décompte temps", 0);
+			mainApplicationTabbedPanel.setSelectedIndex(0);
+			
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception in application startup", e);
+		}
 		
-		JPanel p1 = new JPanel();
-		p1.setLayout(new BoxLayout(p1, BoxLayout.X_AXIS));
-		p1.setPreferredSize(new Dimension(1500,300)) ;
-		
-		JPanel p2  = new JPanel();
-		p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
-		
-		// Formulaire gestion groupe
-		gestGrp = new GestionGroupe();
-		p2.add(gestGrp.getGestionGroupe());
-
-		// Formulaire entrée mouvement
-		inMove = new EntreeMouvement(endDate);
-		p2.add(inMove.getEntreeMouvement());
-
-		// Statistiques globales
-		tStat = new StatGlobaleTable();
-		JScrollPane statGlob = tStat.getStatGlobale();
-		p2.add(statGlob);
-
-		p1.add(p2);
-
-		// Table des mouvements
-		tMove = new MouvementTable();
-		JScrollPane tableMouv = tMove.getMouvementTable();
-		p1.add(tableMouv);
-
-		getContentPane().add(p1);
-
-		// Statistiques détaillées par mois
-		tMois = new PresenceStatisticsTable(endDate);
-		JScrollPane tableMois = tMois.getPresenceStatTable();
-		tableMois.setMinimumSize(new Dimension(1500, 600));
-
-		getContentPane().add(tableMois);
-		
+		getContentPane().add(mainApplicationTabbedPanel);		
 	}	
 }

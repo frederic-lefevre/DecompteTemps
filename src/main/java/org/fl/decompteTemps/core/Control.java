@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.decompteTemps.core;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.text.ParseException;
@@ -59,7 +58,7 @@ public final class Control {
 
         if (! initialized) {
     		// access to properties and logger
-    		runningContext = new RunningContext("org.fl.decompteTemps", URI.create(propertyFile));
+    		runningContext = new RunningContext("org.fl.decompteTemps", propertyFile);
 
     		AdvancedProperties props = runningContext.getProps();
 

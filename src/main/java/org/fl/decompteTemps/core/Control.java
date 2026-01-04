@@ -136,10 +136,7 @@ public final class Control {
     
     public static GroupEntity getIndividualEntityAsGroups(String entityName) {
         
-        Entity e;
-        Entity[] entities = getCompleteGroup().getEntities();
-        for (int i=0; i < entities.length; i++) {
-            e = entities[i];
+        for (Entity e : getCompleteGroup().getEntities()) {
             if (e.getName().equals(entityName)) {
                 GroupEntity res = new GroupEntity();
                 res.addEntity(e);

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,111 +39,107 @@ import org.fl.util.file.FilesUtils;
 
 public final class Control {
 
-	// logger Manager
     private static final Logger presenceLog = Logger.getLogger(Control.class.getName());
 
-    private static Path presenceDirectoryName = null;
-
-    private static boolean initialized = false; 
+    private static Control instance;
     
-    private static RunningContext runningContext;
-    private static StorageGroup storageGroup;
-    private static GroupEntity completeGroup;
-    private static GroupEntity currentGroup;
+    private Path presenceDirectoryName = null;
     
-    private static Date endDate = null;
-    private static boolean endDateIsNow ;
+    private StorageGroup storageGroup;
+    private GroupEntity completeGroup;
+    private GroupEntity currentGroup;
     
-    public static void init(String propertyFile) {
+    private Date endDate;
+    private boolean endDateIsNow ;
+    
+    private static Control getInstance() {
+    	if (instance == null) {
+    		instance = new Control(DecompteTempsGui.getRunningContext());
+    	}
+    	return instance;
+    }
+    
+    private Control() {    	
+    }
+    
+	private Control(RunningContext runningContext) {
 
-        if (! initialized) {
-    		// access to properties and logger
-    		runningContext = new RunningContext("org.fl.decompteTemps", propertyFile);
+		AdvancedProperties props = runningContext.getProps();
 
-    		AdvancedProperties props = runningContext.getProps();
+		// Get the root directory
+		try {
+			presenceDirectoryName = FilesUtils.uriStringToAbsolutePath(props.getProperty("presence.rootDir.name"));
+		} catch (URISyntaxException e) {
+			String errorMessage = "Erreur de parsing sur la propriété presence.rootDir.name";
+			presenceLog.log(Level.SEVERE, errorMessage, e);
+			throw new IllegalArgumentException(errorMessage, e);
+		}
 
-    		// Get the root directory
-    		try {
-				presenceDirectoryName = FilesUtils.uriStringToAbsolutePath(props.getProperty("presence.rootDir.name"));
-			} catch (URISyntaxException e) {
-				String errorMessage = "Erreur de parsing sur la propriété presence.rootDir.name";
-				presenceLog.log(Level.SEVERE, errorMessage, e);
-				throw new IllegalArgumentException(errorMessage, e);
+		// Get the end date
+		String ed = props.getProperty("presence.endDate");
+		if ((ed == null) || ed.isEmpty()) {
+			// if end date is not defined, end date is now
+			endDate = new Date();
+			endDateIsNow = true;
+		} else {
+			try {
+				endDateIsNow = false;
+				endDate = AgendaFormat.getDate(ed, "00", "00");
+			} catch (ParseException e) {
+				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propriété presence.endDate: ", e);
+				endDate = new Date();
+				endDateIsNow = true;
 			}
-
-    		// Get the end date
-    		String ed = props.getProperty("presence.endDate");
-    		if ((ed == null) || ed.isEmpty()) {
-    			// if end date is not defined, end date is now
-    			endDate = new Date();
-    			endDateIsNow = true;
-    		} else {
-    			try {
-    				endDateIsNow = false;
-    				endDate = AgendaFormat.getDate(ed, "00", "00");
-    			} catch (ParseException e) {
-    				presenceLog.log(Level.SEVERE, "Erreur de parsing sur la propriété presence.endDate: ", e);
-    				endDate = new Date();
-    				endDateIsNow = true;
-    			}
-    		}
-
-    		storageGroup = new StorageGroup(presenceDirectoryName);
-    		completeGroup = storageGroup.getGroupEntity();
-    		currentGroup = storageGroup.getGroupEntity();
-
-    		initialized = true;
-        }
-    }
-
-    /**
-     * @return Returns the presenceDirectoryName.
-     */
-    public static Path getPresenceDirectoryName() {
-        if (presenceDirectoryName == null) {
-        	init(DecompteTempsGui.getPropertyFile());
-        }
-        return presenceDirectoryName;
-    }
-    
-    public static RunningContext getRunningContext() {
-        if (! initialized) {
-        	init(DecompteTempsGui.getPropertyFile());
-        }
-		return runningContext;
+		}
 	}
+
+    public static Path getPresenceDirectoryName() {
+        return getInstance().presenceDirectoryName;
+    }
     
     public static GroupEntity getCurrentGroup() {
-        if (! initialized) {
-        	init(DecompteTempsGui.getPropertyFile());
-        }
-		return currentGroup;
+		return getInstance().getInstanceCurrentGroup();
 	}
 	
+    private StorageGroup getInstanceStorageGroup() {
+    	// Lazy get to avoid stack overflow (loop) during init
+    	if (storageGroup == null) {
+    		storageGroup = new StorageGroup(presenceDirectoryName);
+    	}
+    	return storageGroup;
+    	
+    }
+    
+    private GroupEntity getInstanceCurrentGroup() {
+    	// Lazy get to avoid stack overflow (loop) during init
+    	if (currentGroup == null) {
+    		currentGroup = getInstanceStorageGroup().getGroupEntity();
+    	}
+    	return currentGroup;
+    }
+    
+    private GroupEntity getInstancCompleteGroup() {
+    	// Lazy get to avoid stack overflow (loop) during init
+    	if (completeGroup == null) {
+    		completeGroup = getInstanceStorageGroup().getGroupEntity();
+    	}
+    	return completeGroup;
+    }
+    
     public static void setCurrentGroup(GroupEntity gr) {
-        if (! initialized) {
-        	init(DecompteTempsGui.getPropertyFile());
-        }
-		currentGroup = gr;
+    	getInstance().currentGroup = gr;
 	}
     
     public static GroupEntity getCompleteGroup() {
-        if (! initialized) {
-        	init(DecompteTempsGui.getPropertyFile());
-        }
-		return completeGroup;
+		return getInstance().getInstancCompleteGroup();
 	}
     
-    /**
-     * @param entityName
-     * @return a GroupEntity composed of a single entity
-     */
     public static GroupEntity getIndividualEntityAsGroups(String entityName) {
         
         Entity e;
         Entity[] entities = getCompleteGroup().getEntities();
         for (int i=0; i < entities.length; i++) {
-            e = (Entity)entities[i];
+            e = entities[i];
             if (e.getName().equals(entityName)) {
                 GroupEntity res = new GroupEntity();
                 res.addEntity(e);
@@ -154,12 +150,9 @@ public final class Control {
     }
 
 	public static Date getEndDate() {
-        if (endDate == null) {
-        	init(DecompteTempsGui.getPropertyFile());
-        }
-		if (endDateIsNow) {
-			endDate = new Date();
+		if (getInstance().endDateIsNow) {
+			getInstance().endDate = new Date();
 		}
-		return endDate;
+		return getInstance().endDate;
 	}
 }

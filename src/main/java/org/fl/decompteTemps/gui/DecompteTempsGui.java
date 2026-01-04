@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import org.fl.decompteTemps.core.Control;
+import org.fl.util.RunningContext;
 import org.fl.util.swing.ApplicationTabbedPane;
 
 import javax.swing.BoxLayout;
@@ -45,6 +46,8 @@ public class DecompteTempsGui extends JFrame {
 	
 	private static final String DEFAULT_PROP_FILE = "presence.properties";
 	
+	private static RunningContext runningContext;
+	
 	private static StatTitle st;
 	private static GestionGroupe gestGrp;
 	private static StatGlobaleTable tStat;
@@ -53,12 +56,10 @@ public class DecompteTempsGui extends JFrame {
 	private static EntreeMouvement inMove;
 	
 	private static final Logger logger = Logger.getLogger(DecompteTempsGui.class.getName());
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		
-		Control.init(getPropertyFile());
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -71,6 +72,13 @@ public class DecompteTempsGui extends JFrame {
 		});
 	}
 
+	public static RunningContext getRunningContext() {
+		if (runningContext == null) {
+			runningContext = new RunningContext("org.fl.decompteTemps", DEFAULT_PROP_FILE);
+		}
+		return runningContext;
+	}
+					
 	public static String getPropertyFile() {
 		return DEFAULT_PROP_FILE;
 	}
@@ -85,14 +93,10 @@ public class DecompteTempsGui extends JFrame {
 		DecompteTempsGui.tStat.update();
 	}
 	
-	/**
-	 * Create the application.
-	 */
+
 	private DecompteTempsGui() {
 		
-		Date endDate = Control.getEndDate();
-		
-		ApplicationTabbedPane mainApplicationTabbedPanel = new ApplicationTabbedPane(Control.getRunningContext());
+		ApplicationTabbedPane mainApplicationTabbedPanel = new ApplicationTabbedPane(getRunningContext());
 				
 		setBounds(50, 50, 1600, 900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,6 +106,8 @@ public class DecompteTempsGui extends JFrame {
 			JPanel applicationPanel = new JPanel();
 			
 			applicationPanel.setLayout(new BoxLayout(applicationPanel, BoxLayout.Y_AXIS));
+			
+			Date endDate = Control.getEndDate();
 			
 			// Titre de la statistique
 			st = new StatTitle(endDate);

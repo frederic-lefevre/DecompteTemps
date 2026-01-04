@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,34 +34,34 @@ public class StorageGroup {
 
 	private static final Logger presenceLog = Logger.getLogger(StorageGroup.class.getName());
 	
-    private final GroupEntity group ;
-    private static final String ENTITY_EXTENTION = ".entity"; ;
-    
-    public StorageGroup(Path dir) {
-        super();
-        
-        if ((dir == null) || (! Files.isDirectory(dir))) {
-            presenceLog.severe("Argument is not a directory") ;
-            throw new IllegalArgumentException("Argument is not a directory") ;
-        }
-        group = new GroupEntity() ;
-        
-        // scan directory
-        try (DirectoryStream<Path> dirFileStream = Files.newDirectoryStream(dir)) {
+	private final GroupEntity group;
+	private static final String ENTITY_EXTENTION = ".entity";
 
-        	for (Path currFile : dirFileStream) {
-        		if ((Files.isRegularFile(currFile)) && (currFile.toString().endsWith(ENTITY_EXTENTION))) {
-        			presenceLog.fine("Found an entity " + currFile) ;
-        			group.addEntity(new Entity(new StorageEntity(currFile))) ;
-        		}
-        	}
-        } catch (Exception e) {
-        	presenceLog.log(Level.SEVERE, "Exception when scanning directory " + dir, e);
-        }
-        
-    }
+	public StorageGroup(Path dir) {
+		super();
 
-    public GroupEntity getGroupEntity() {
-        return group ;
-    }
+		if ((dir == null) || (!Files.isDirectory(dir))) {
+			presenceLog.severe("Argument is not a directory");
+			throw new IllegalArgumentException("Argument is not a directory");
+		}
+		group = new GroupEntity();
+
+		// scan directory
+		try (DirectoryStream<Path> dirFileStream = Files.newDirectoryStream(dir)) {
+
+			for (Path currFile : dirFileStream) {
+				if ((Files.isRegularFile(currFile)) && (currFile.toString().endsWith(ENTITY_EXTENTION))) {
+					presenceLog.fine("Found an entity " + currFile);
+					group.addEntity(new Entity(new StorageEntity(currFile)));
+				}
+			}
+		} catch (Exception e) {
+			presenceLog.log(Level.SEVERE, "Exception when scanning directory " + dir, e);
+		}
+
+	}
+
+	public GroupEntity getGroupEntity() {
+		return group;
+	}
 }

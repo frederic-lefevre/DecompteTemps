@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl</groupId>
 	<artifactId>decompteTemps</artifactId>
-	<version>1.12.0</version>
+	<version>1.12.1</version>
 
 	<dependencyManagement>
 		<dependencies>

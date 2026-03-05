@@ -69,10 +69,10 @@ public class MouvementTable {
 		StringBuilder mvt ;
 		
     	for (int i=0; i < events.length; i++) {
-    		d = events[i].getDateEvents() ;
-    		evNames = events[i].getNameEvents() ;
-    		evType = events[i].getTypeEvents() ;
-    		comment = events[i].getComment() ;
+    		d = events[i].dateEvents() ;
+    		evNames = events[i].nameEvents() ;
+    		evType = events[i].typeEvents() ;
+    		comment = events[i].comment() ;
     
     		result[i][0] = dateFranceFormat.format(d); 
     		mvt = new StringBuilder("") ;

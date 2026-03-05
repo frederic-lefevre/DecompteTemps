@@ -117,7 +117,7 @@ public class Entity {
 	 * @return the first date of presence
 	 */
 	public Date getBeginPresence() {
-		return (presence.getPeriods())[0].getBegin();
+		return (presence.getPeriods())[0].begin();
 	}
 
 	/**
@@ -158,10 +158,10 @@ public class Entity {
 	 */
 	public Date getEndPresence() throws IOException {
 		Period lastPeriod = getLastPeriod();
-		if (lastPeriod.getEnd() == null) {
-			return lastPeriod.getBegin();
+		if (lastPeriod.end() == null) {
+			return lastPeriod.begin();
 		} else {
-			return lastPeriod.getEnd();
+			return lastPeriod.end();
 		}
 	}
 
@@ -176,7 +176,7 @@ public class Entity {
 	 */
 	public int getPresencePlace() throws IOException {
 		Period lastPeriod = getLastPeriod();
-		if (lastPeriod.getEnd() == null) {
+		if (lastPeriod.end() == null) {
 			return IN;
 		} else {
 			return OUT;
@@ -195,9 +195,9 @@ public class Entity {
 		Period[] periods = presence.getPeriods();
 		String[] eventName = { getName() };
 		for (int i = 0; i < periods.length; i++) {
-			res.addEvents(periods[i].getBegin(), eventName, Events.IN, periods[i].getCommentIn());
-			if (periods[i].getEnd() != null) {
-				res.addEvents(periods[i].getEnd(), eventName, Events.OUT, periods[i].getCommentOut());
+			res.addEvents(periods[i].begin(), eventName, Events.IN, periods[i].commentIn());
+			if (periods[i].end() != null) {
+				res.addEvents(periods[i].end(), eventName, Events.OUT, periods[i].commentOut());
 			}
 		}
 		return res;

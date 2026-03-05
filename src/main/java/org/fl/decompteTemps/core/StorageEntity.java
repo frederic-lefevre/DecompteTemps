@@ -174,9 +174,9 @@ public class StorageEntity {
                 // store the presence agenda in the file
                 Period[] periods = agd.getPeriods() ;
                 for (int i=0; i < periods.length; i++) {
-                    addDate(out, periods[i].getBegin(), periods[i].getCommentIn(), inMark) ;
-                    if (periods[i].getEnd() != null) {
-                        addDate(out, periods[i].getEnd(), periods[i].getCommentOut(), outMark) ;
+                    addDate(out, periods[i].begin(), periods[i].commentIn(), inMark) ;
+                    if (periods[i].end() != null) {
+                        addDate(out, periods[i].end(), periods[i].commentOut(), outMark) ;
                     }
                 }
                 out.close() ;
@@ -196,9 +196,9 @@ public class StorageEntity {
     		out.append(name) ;
     		out.newLine() ;
 
-    		addDate(out, p.getBegin(), p.getCommentIn(), inMark) ;
-    		if (p.getEnd() != null) {
-    			addDate(out, p.getEnd(), p.getCommentOut(), outMark) ;
+    		addDate(out, p.begin(), p.commentIn(), inMark) ;
+    		if (p.end() != null) {
+    			addDate(out, p.end(), p.commentOut(), outMark) ;
     		}
     		out.close() ;
 
@@ -217,7 +217,7 @@ public class StorageEntity {
             if (Files.exists(fileEntity)) {
                
                 Period lastPeriod = getLastPeriod() ;
-                if (lastPeriod.getEnd() != null) {
+                if (lastPeriod.end() != null) {
                 	 out.close() ;
                     throw new IllegalArgumentException("Trying to write a end date instead of begin") ;                   
                 }
@@ -246,7 +246,7 @@ public class StorageEntity {
         		out.newLine() ;
         	}
             Period lastPeriod = getLastPeriod() ;
-            if (lastPeriod.getEnd() == null) {
+            if (lastPeriod.end() == null) {
             	out.close() ;
                 throw new IllegalArgumentException("Trying to write a begin date instead of end") ;
             }
@@ -293,8 +293,8 @@ public class StorageEntity {
 	        }
 	
 	        if (p != null) {
-	        	presenceLog.finer("GetLastPeriod: begin=" + dateFormat.format(p.getBegin())) ;
-	            if (p.getEnd() != null)   presenceLog.finer(" End=" + dateFormat.format(p.getEnd())) ;
+	        	presenceLog.finer("GetLastPeriod: begin=" + dateFormat.format(p.begin())) ;
+	            if (p.end() != null)   presenceLog.finer(" End=" + dateFormat.format(p.end())) ;
 	        }
         }
         return p;

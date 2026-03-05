@@ -25,59 +25,44 @@ SOFTWARE.
 package org.fl.decompteTemps.core;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.logging.Logger;
 
-public class Period {
+public record Period(Date begin, Date end, String commentIn,  String commentOut)  {
     
 	private static final Logger presenceLog = Logger.getLogger(Period.class.getName());
-	
-    private Date   begin;
-    private Date   end;
-    private String commentIn;
-    private String commentOut;
-    
 
-    public Period(Date b, Date e, String ci,  String co) {
-        commentIn  = ci;
-        commentOut = co;
-        if (b == null) {
-            throw new IllegalArgumentException("Begin is null") ;
-        }
-        if ((e != null) && (b.after(e))) {
+    public Period {
+
+        Objects.requireNonNull(begin);
+        if ((end != null) && (begin.after(end))) {
             presenceLog.severe("Begin is after end") ;
-            throw new IllegalArgumentException("Begin is after end") ;
+            throw new IllegalArgumentException("Begin is after end");
         }
-       begin = b;
-       end = e ;
     }
     
     public long getDuration() {
         if (end == null) {
-            return (Control.getEndDate().getTime() - begin.getTime()) ;
+            return (Control.getEndDate().getTime() - begin.getTime());
         } else {
-            return (end.getTime() - begin.getTime()) ;
+            return (end.getTime() - begin.getTime());
         }
     }
     
     public long getDuration(Date a, Date b) {
         if (a.after(b)) {
-            presenceLog.severe("Begin is after end") ;
-            throw new IllegalArgumentException("Begin is after end") ;
+            presenceLog.severe("Begin is after end");
+            throw new IllegalArgumentException("Begin is after end");
         }
-        long start = Math.max(a.getTime(), begin.getTime()) ;
+        long start = Math.max(a.getTime(), begin.getTime());
         
-        long stop ;
+        long stop;
         if (end == null) {
-            stop = Math.min(b.getTime(), Control.getEndDate().getTime()) ;
+            stop = Math.min(b.getTime(), Control.getEndDate().getTime());
         } else {
-            stop = Math.min(b.getTime(), end.getTime()) ;
+            stop = Math.min(b.getTime(), end.getTime());
         }
         
-        return Math.max(stop - start, 0) ;
+        return Math.max(stop - start, 0);
     }
-
-    public Date   getBegin() 	  { return begin	  ; }
-    public Date   getEnd() 		  { return end		  ; }
-    public String getCommentIn()  { return commentIn  ; }
-    public String getCommentOut() { return commentOut ; }
 }

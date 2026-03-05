@@ -34,8 +34,8 @@ public class EventsComparator implements Comparator<Events> {
     }
 
     public int compare(Events o1, Events o2) {
-		Date d0 = o1.getDateEvents() ;
-		Date d1 = o2.getDateEvents() ;
+		Date d0 = o1.dateEvents() ;
+		Date d1 = o2.dateEvents() ;
 		return d0.compareTo(d1) ;
     }
 }

@@ -76,7 +76,7 @@ public class EventAgenda {
 		// sort by date, last date first
 		Arrays.sort(resEvt, new Comparator<Events>() {
 			public int compare(Events o1, Events o2) {
-				return ((Events) o2).getDateEvents().compareTo(((Events) o1).getDateEvents());
+				return ((Events) o2).dateEvents().compareTo(((Events) o1).dateEvents());
 			}
 		});
 		

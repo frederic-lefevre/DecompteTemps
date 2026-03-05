@@ -120,9 +120,9 @@ public class AgendaFormat {
 	    out.println("<table class=\"detail\"") ;
 	    for (int i=0; i < events.length; i++) {
 	        out.println("<tr>") ;
-	        d = events[i].getDateEvents() ;
-	        evNames = events[i].getNameEvents() ;
-	        evType = events[i].getTypeEvents() ;
+	        d = events[i].dateEvents() ;
+	        evNames = events[i].nameEvents() ;
+	        evType = events[i].typeEvents() ;
 	        out.print("<td class=\"detdate\">" + dateFranceFormat.format(d) + "</td><td class=\"detname\">") ;
 	        for (int j=0; j < evNames.length; j++) {
 	            out.print(evNames[j] + " ") ;
@@ -135,7 +135,7 @@ public class AgendaFormat {
 	            out.print(evType) ;
 	        }
 	        out.print("</td>") ;
-	        out.println("<td class=\"detcom\">" + events[i].getComment() + "</td>") ;
+	        out.println("<td class=\"detcom\">" + events[i].comment() + "</td>") ;
 	        out.println("</tr>") ;
 	    }
 	}

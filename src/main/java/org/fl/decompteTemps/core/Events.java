@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,20 +28,20 @@ import java.util.Date;
 
 public class Events {
 
-    private Date 	 dateEvents ;
-    private String[] nameEvents ;
-    private int 	 typeEvents ;
-    private String   comment;
-    
-    public final static int IN  = 1 ;
-    public final static int OUT = 2 ;
+	private final Date dateEvents;
+	private String[] nameEvents;
+	private final int typeEvents;
+	private String comment;
 
-    public Events(Date dateEvents, String[] nameEvents, int typeEvents, String c) {
+	public final static int IN = 1;
+	public final static int OUT = 2;
+
+    public Events(Date dateEvents, String[] nameEvents, int typeEvents, String comment) {
         super();
         this.dateEvents = dateEvents;
         this.nameEvents = nameEvents;
         this.typeEvents = typeEvents;
-        comment = c;
+        this.comment = comment;
     }
     
     private void addEventsName(String[] names) {
@@ -64,9 +64,9 @@ public class Events {
         
         if ((e.typeEvents == typeEvents) && (e.dateEvents.equals(dateEvents))) {
             addEventsName(e.nameEvents) ;
-            String eComment = e.getComment() ;
+            String eComment = e.comment() ;
             if ((eComment != null) && (eComment.length() > 0)) {
-                comment = comment + ", " + e.getComment() ;
+                comment = comment + ", " + e.comment() ;
             }
             return true ;
         } else {
@@ -74,19 +74,19 @@ public class Events {
         }
     }
 
-    public Date getDateEvents() {
+    public Date dateEvents() {
         return dateEvents;
     }
 
-    public String[] getNameEvents() {
+    public String[] nameEvents() {
         return nameEvents;
     }
 
-    public int getTypeEvents() {
+    public int typeEvents() {
         return typeEvents;
     }
 
-    public String getComment() {
+    public String comment() {
         return comment;
     }
 }

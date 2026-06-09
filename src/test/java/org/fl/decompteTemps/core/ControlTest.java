@@ -26,10 +26,13 @@ package org.fl.decompteTemps.core;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.net.URISyntaxException;
+
 import org.fl.decompteTemps.gui.DecompteTempsGui;
 import org.fl.util.RunningContext;
 import org.junit.jupiter.api.Test;
 
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 
 class ControlTest {
@@ -63,5 +66,43 @@ class ControlTest {
 					assertThat(buildInfo.get("moduleName").asString()).isEqualTo("org.fl.util");
 				}
 				);
+	}
+	
+	private static final String APPLICATION_NAME = "org.fl.decompteTemps";
+	
+	@Test
+	void buildInformationTest() throws JacksonException, URISyntaxException {
+		
+		RunningContext runningContext = DecompteTempsGui.getRunningContext();
+		
+		assertThat(runningContext).isNotNull();
+		
+		JsonNode buildInformation = runningContext.getBuildInformationAsJson();
+		assertThat(buildInformation).isNotNull();
+
+		assertThat(buildInformation).isNotEmpty().hasSize(2)
+			.satisfiesExactlyInAnyOrder(
+				buildInfo -> assertModuleBuildInfo(buildInfo, APPLICATION_NAME),
+				buildInfo -> assertModuleBuildInfo(buildInfo, "org.fl.util")
+			);
+	}
+	
+	private void assertModuleBuildInfo(JsonNode buildInfo, String moduleName) {
+		assertThat(buildInfo).hasSize(14);
+		assertThat(buildInfo.has("builderName")).isTrue();
+		assertThat(buildInfo.has("builderEmail")).isTrue();
+		assertThat(buildInfo.has("gitCommitIdDescribe")).isTrue();
+		assertThat(buildInfo.get("moduleName")).isNotNull();
+		assertThat(buildInfo.get("moduleName").asString()).isEqualTo(moduleName);
+		assertThat(buildInfo.has("version")).isTrue();
+		assertThat(buildInfo.has("buildtime")).isTrue();
+		assertThat(buildInfo.has("builder")).isTrue();
+		assertThat(buildInfo.has("buildhost")).isTrue();
+		assertThat(buildInfo.has("buildOs")).isTrue();
+		assertThat(buildInfo.has("gitBranch")).isTrue();
+		assertThat(buildInfo.has("gitCommitId")).isTrue();
+		assertThat(buildInfo.has("gitCommitUrl")).isTrue();
+		assertThat(buildInfo.has("gitCommitTime")).isTrue();
+		assertThat(buildInfo.has("gitDirty")).isTrue();
 	}
 }

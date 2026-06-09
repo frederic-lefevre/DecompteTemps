@@ -100,7 +100,7 @@ public class DecompteTempsGui extends JFrame {
 				
 		setBounds(50, 50, 1600, 900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Décompte temps") ;
+		setTitle("Décompte temps [" + getRunningContext().getVersion() + "]") ;
 		
 		try {
 			JPanel applicationPanel = new JPanel();
